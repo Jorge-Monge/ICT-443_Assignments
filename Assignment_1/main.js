@@ -1,7 +1,29 @@
 
 // Global variables
-var itemsArray = [];
-var item = "";
+let itemsArray = [];
+let item = "";
+
+// Get the shopping list items from the database
+let url = 'server_code.php';
+let httpMethod = 'GET';
+
+httpPerformRequest(url, httpMethod, null)
+    .then(res => console.log(res))
+
+async function httpPerformRequest(url, httpMethod, httpBody) {
+    // This function is supposed to make an HTTP request to the back-end
+    // and receive a JSON response.
+    return (await fetch(url, {
+        method: httpMethod,
+        mode: 'no-cors',
+        headers: {
+            // Informs the server about the types of data that can be sent back
+            'Accept': "application/json"
+        },
+        body: httpBody
+    }));
+}
+
 /*
 while (item !== "x") {
     item = prompt("Enter grocery item");
