@@ -11,8 +11,44 @@
 </head>
 
 <body>
-    <h1>Open Shopping List</h1>
+    <h1>Another To-Do List</h1>
     <div id="shopping_list_container">
+    </div>
+    <div id="form_container">
+        <form id="new_task_form_id" name="new_task_form" action="">
+            <label for="task_name_input_id">Name</label>
+            <input type="text" name="task_name" id="task_name_input_id">
+            <label for="task_description_input_id">Description</label>
+            <input type="text" name="task_description" id="task_description_input_id">
+            <label for="task_due_date_input_id">Due Date</label>
+            <input type="date" name="task_due_date" id="task_due_date_input_id">
+            <label for="task_is_urgent_id">Urgent</label>
+            <input type="checkbox" name="task_is_urgent" id="task_is_urgent_id">
+            <label for="task_category_input_id">Category</label>
+            <select name="task_category" id="task_category_input_id">
+                <optgroup label="Personal">
+                    <option value="Groceries">Groceries</option>
+                    <option value="Working Out">Working Out</option>
+                    <option value="Family">Family</option>
+                    <option value="Home Maintenance">Home Maintenance</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Other">Other</option>
+                </optgroup>
+                <optgroup label="Work">
+                    <option value="Task">Task</option>
+                    <option value="Phone Call">Phone Call</option>
+                    <option value="Meeting">Meeting</option>
+                    <option value="Other">Other</option>
+                </optgroup>
+                <optgroup label="Other">
+                    <option value="Other">Other</option>
+                </optgroup>
+            </select>
+            <label for="task_order_input_id">Order Number</label>
+            <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id">
+            <button type="submit" id="new_task_form_submit_btn">Submit</button>
+            <button id="remove_task_btn">Remove</button>
+        </form>
     </div>
 
 </body>
