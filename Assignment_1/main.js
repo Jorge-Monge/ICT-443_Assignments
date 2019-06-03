@@ -5,36 +5,24 @@ let item = "";
 
 // Get the shopping list items from the database
 let url = 'server_code.php';
-let httpMethod = 'GET';
+let httpMethod = 'POST';
+let formData = new FormData();
+formData.append('functionName', 'connectToDb');
 
-httpPerformRequest(url, httpMethod, null)
+httpPerformRequest(url, httpMethod, formData)
     .then(res => console.log(res))
 
+
+// FUNCTION DEFINITIONS    
 async function httpPerformRequest(url, httpMethod, httpBody) {
     // This function is supposed to make an HTTP request to the back-end
     // and receive a JSON response.
     return (await fetch(url, {
         method: httpMethod,
-        mode: 'no-cors',
         headers: {
             // Informs the server about the types of data that can be sent back
             'Accept': "application/json"
         },
         body: httpBody
-    }));
+    })).json(); // This was absolutely necessary to read the response
 }
-
-/*
-while (item !== "x") {
-    item = prompt("Enter grocery item");
-    if (item === "x") break;
-    itemsArray.push(item);
-}
-
-var shoppingListDiv = document.getElementById("shopping_list");
-
-for (var i = 0; i<itemsArray.length; i++) {
-    console.log("Item number " + (i+1) + " is " + itemsArray[i]);
-    shoppingListDiv.innerHTML += "Item number " + (i+1) + " is " + itemsArray[i] + "<br>";
-}
-*/
