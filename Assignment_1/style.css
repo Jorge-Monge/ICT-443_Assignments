@@ -1,0 +1,58 @@
+ul {
+    list-style-type: none;
+    display: flex;
+    margin: 0 0;
+    padding: 0;
+}
+
+li {
+    margin: 0.1em 0.2em;
+    padding: 0.3em;
+
+}
+
+li.heading {
+    text-align: center;
+}
+
+li.todo_item_id {
+    display: none;
+}
+
+li.todo_item_order {
+    background-color: aquamarine;
+    width: 4em;
+}
+
+li.todo_item_name {
+    background-color: rosybrown;
+    width: 15em;
+}
+
+.todo_item_container {
+    background-color: red;
+}
+
+li.todo_item_description {
+    background-color:aquamarine;
+    width: 25em;
+}
+
+li.todo_item_dueDate {
+    background-color: rosybrown;
+    width: 5.5rem;
+}
+
+li.todo_item_isUrgent {
+    background-color: cadetblue;
+    width: 3rem;
+    font-size: 1rem;
+   
+}
+
+li.todo_item_category {
+    background-color:  mediumpurple;
+    width: 20rem;
+    font-size: 1rem;
+   
+}

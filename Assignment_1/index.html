@@ -6,26 +6,37 @@
     <title>Grocery List</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="style.css" type="text/css">
     <script src="main.js" defer></script>
 </head>
 
 <body>
     <h1>Another To-Do List</h1>
-    <div id="shopping_list_container">
+    <div id="todo_item_list_container">
+        <div id="todo_item_container_id" class="todo_item_container heading">
+            <ul id="todo_item_ul_id" class="todo_item_ul heading">
+                <li class="todo_item_order heading">Priority</li>
+                <li class="todo_item_name heading">Task Name</li>
+                <li class="todo_item_description heading">Task Description</li>
+                <li class="todo_item_dueDate heading">Due Date</li>
+                <li class="todo_item_isUrgent heading">Urgent</li>
+                <li class="todo_item_category heading">Category</li>
+            </ul>
+        </div>
     </div>
+    <button id="remove_all_tasks_btn">Remove all items!</button>
     <div id="form_container">
         <form id="new_task_form_id" name="new_task_form" action="">
             <label for="task_name_input_id">Name</label>
-            <input type="text" name="task_name" id="task_name_input_id">
+            <input type="text" name="task_name" id="task_name_input_id" required>
             <label for="task_description_input_id">Description</label>
             <input type="text" name="task_description" id="task_description_input_id">
             <label for="task_due_date_input_id">Due Date</label>
-            <input type="date" name="task_due_date" id="task_due_date_input_id">
+            <input type="date" name="task_due_date" id="task_due_date_input_id" required>
             <label for="task_is_urgent_id">Urgent</label>
             <input type="checkbox" name="task_is_urgent" id="task_is_urgent_id">
             <label for="task_category_input_id">Category</label>
-            <select name="task_category" id="task_category_input_id">
+            <select name="task_category" id="task_category_input_id" required>
                 <optgroup label="Personal">
                     <option value="Groceries">Groceries</option>
                     <option value="Working Out">Working Out</option>
@@ -47,7 +58,6 @@
             <label for="task_order_input_id">Order Number</label>
             <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id">
             <button type="submit" id="new_task_form_submit_btn">Submit</button>
-            <button id="remove_task_btn">Remove</button>
         </form>
     </div>
 
