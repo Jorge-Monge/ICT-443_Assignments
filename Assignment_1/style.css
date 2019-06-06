@@ -3,42 +3,46 @@
     background-color: red;
     margin: 0.5rem;
     padding: 0;
-    
-    /*position: relative;*/
 }
 
 
-li.todo_item_id {
+.todo_item_id {
     display: none;
 }
 
-li.todo_item {
+.todo_item_section {
     position: relative;
     margin: 0 0 0 0rem;
-    padding: 1.3rem 0.5rem 0.5rem 2.5rem;
+    padding: 0.7rem 0.5rem 0.5rem 1rem;
     margin-top: 0rem;
-    
     text-align: left;
-    
     font-size: 1rem;
 }
 
 .todo_item_container {
-    height: 20rem;
-    overflow: auto;
+    /*height: 23rem;*/
+    /*overflow: auto;*/
     margin-bottom: 2rem;
 }
 
-li.todo_item_order {
+.todo_item_order {
     background-color: aquamarine;
    
 }
 
-li.todo_item_name {
+.todo_item_name {
     background-color: rosybrown;
+    height: 4rem;
+    overflow-y: auto;
 }
 
-li.todo_item:before {
+.todo_item_section_heading {
+    font-size: 0.8rem;
+    font-weight: bolder;
+}
+
+/*
+.todo_item:before {
     font-size: 0.8rem;
     position: absolute;
     top: 0rem;
@@ -46,15 +50,11 @@ li.todo_item:before {
     font-weight: bolder;
 }
 
-li.todo_item_name:before {
+.todo_item_name:before {
     content: "NAME";
 }
 
-li.todo_item_description {
-    background-color:aquamarine;  
-}
-
-li.todo_item_description:before {
+.todo_item_description:before {
     content: "DESCRIPTION";
 }
 
@@ -62,35 +62,52 @@ li.todo_item_dueDate:before {
     content: "DUE DATE";
 }
 
-li.todo_item_isUrgent:before {
+.todo_item_isUrgent:before {
     content: "URGENT";
 }
 
-li.todo_item_category:before {
+.todo_item_category:before {
     content: "CATEGORY";
+}
+
+*/
+
+
+
+.todo_item_description {
+    background-color:aquamarine;  
+    height: 8rem;
+    overflow-y: auto;
+    
+}
+
+.scrollable-container {
+    overflow-y: auto;
 }
 
 
 
-li.todo_item_dueDate {
+
+
+.todo_item_dueDate {
     background-color: rosybrown;
     
 }
 
-li.todo_item_isUrgent {
+.todo_item_isUrgent {
     background-color: cadetblue;
     
-    font-size: 1rem;
+   
    
 }
 
-li.todo_item_category {
+.todo_item_category {
     background-color:  mediumpurple;
     
-    font-size: 1rem;
+    
    
 }
 
-li.todo_item {
+.todo_item {
     
 }
