@@ -7,139 +7,193 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-        crossorigin="anonymous">
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script src="main.js" defer></script>
 </head>
 
 <body>
-    <h1>Another To-Do List</h1>
-    <nav id="todo_navbar_id" class="">
-        <div id="form_container">
-            <form id="new_task_form_id" name="new_task_form" action="">
-                <label for="task_name_input_id">Name</label>
-                <input type="text" name="task_name" id="task_name_input_id" required>
-                <label for="task_description_input_id">Description</label>
-                <input type="text" name="task_description" id="task_description_input_id">
-                <label for="task_due_date_input_id">Due Date</label>
-                <input type="date" name="task_due_date" id="task_due_date_input_id" required>
-                <label for="task_is_urgent_id">Urgent</label>
-                <input type="checkbox" name="task_is_urgent" id="task_is_urgent_id">
-                <label for="task_category_input_id">Category</label>
-                <select name="task_category" id="task_category_input_id" required>
-                    <optgroup label="Personal">
-                        <option value="Groceries">Groceries</option>
-                        <option value="Working Out">Working Out</option>
-                        <option value="Family">Family</option>
-                        <option value="Home Maintenance">Home Maintenance</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Other">Other</option>
-                    </optgroup>
-                    <optgroup label="Work">
-                        <option value="Task">Task</option>
-                        <option value="Phone Call">Phone Call</option>
-                        <option value="Meeting">Meeting</option>
-                        <option value="Other">Other</option>
-                    </optgroup>
-                    <optgroup label="Other">
-                        <option value="Other">Other</option>
-                    </optgroup>
-                </select>
-                <label for="task_order_input_id">Order Number</label>
-                <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id">
-                <button type="submit" id="new_task_form_submit_btn">Submit</button>
-            </form>
+    <div class="jumbotron jumbotron-fluid border-bottom border-dark">
+        <div class="container">
+            <h1 class="display-4">Just another task manager</h1>
+            <p class="lead">Some Bootstrap, some JS, and a PHP back-end.</p>
+            <button id="new_task_btn" type="button" class="btn btn-primary btn-lg col-12">New Task</button>
         </div>
-    </nav>
+    </div>
+
+    <div id="global_container_form" class="col-12 border-bottom border-dark">
+            <div id="form_container" class="container ">
+                    <form id="new_task_form_id" name="new_task_form" action="" class="form-row">
+            
+                        <div class="form-group col-md-2">
+                            <label for="task_order_input_id">Order #</label>
+                            <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id" class="form-control">
+                        </div>
+            
+                        <div class="form-group col-md-3">
+                            <label for="task_category_input_id">Category</label>
+                            <select name="task_category" id="task_category_input_id" class="form-control" required>
+                                <optgroup label="Personal">
+                                    <option value="Groceries">Groceries</option>
+                                    <option value="Working Out">Working Out</option>
+                                    <option value="Family">Family</option>
+                                    <option value="Home Maintenance">Home Maintenance</option>
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Other">Other</option>
+                                </optgroup>
+                                <optgroup label="Work">
+                                    <option value="Task">Task</option>
+                                    <option value="Phone Call">Phone Call</option>
+                                    <option value="Meeting">Meeting</option>
+                                    <option value="Other">Other</option>
+                                </optgroup>
+                                <optgroup label="Other">
+                                    <option value="Other">Other</option>
+                                </optgroup>
+                            </select>
+                        </div><!--  Category Selection Ends -->
+            
+                        <div class="form-group col-md-3 col-sm-12">
+                            <label for="task_name_input_id">Name</label>
+                            <input type="text" name="task_name" id="task_name_input_id" class="form-control" required>
+                        </div>
+            
+                        <div class="form-group  col-md-3 col-6">
+                            <label for="task_due_date_input_id">Due Date</label>
+                            <input type="date" name="task_due_date" id="task_due_date_input_id" class="form-control" required>
+                        </div>
+            
+                        <div class="col-md-1 col-6 custom-control custom-checkbox">
+                            <input type="checkbox" name="task_is_urgent" id="task_is_urgent_id" class="custom-control-input">
+                            <label for="task_is_urgent_id" class="custom-control-label">Urgent</label>
+                        </div>
+            
+                        <div class="form-group col-12">
+                            <label for=" task_description_input_id">Description</label>
+                            <textarea name="task_description" id="task_description_input_id" class="form-control"></textarea>
+                        </div>
+            
+            
+            
+            
+            
+            
+                        <button type="submit" id="new_task_form_submit_btn" class="btn btn-primary btn-lg col-sm-12"><span
+                                class="text-in-btn">Submit Task</span><span class="right-arrow">&#187;</span></button>
+                    </form>
+                </div>
+    </div>
     
+
+
     <!-- Whole body of items -->
     <div id="todo_item_list_container" class="container container-fluid">
 
         <div class="row">
-                <div class="todo_item_supercontainer col-md-6 col-lg-4">
-                        <div data-id="1" data-order="1" class="todo_item_container card">
-                        <div id="todo_item_ul_id_1" class="todo_item_ul">
-                            <div class="todo_item_section_heading">NAME</div>
-                            <div class="todo_item_section todo_item_name">Primera cosa que hacer. Item name. Item name. Item name. Item name. Item name. Item name.</div>
-                            <div class="todo_item_section_heading">DESCRIPTION</div>
-                            <div class="todo_item_section todo_item_description">De esto sí que no me puedo olvidar, ¿eh?</div>
-                            <div class="todo_item_section_heading">DUE DATE</div>
-                            <div class="todo_item_section todo_item_dueDate">2019-June-04</div>
-                            <div class="todo_item_section_heading">URGENT</div>
-                            <div class="todo_item_section todo_item_isUrgent">Urgent</div>
-                            <div class="todo_item_section_heading">CATEGORY</div>
-                            <div class="todo_item_section todo_item_category">Personal | Groceries</div>
+            <div class="todo_item_supercontainer col-md-6 col-lg-4">
+                <div data-id="1" data-order="1" class="todo_item_container card">
+                    <div id="todo_item_ul_id_1" class="todo_item_ul">
+                        <div class="todo_item_section_heading">NAME</div>
+                        <div class="todo_item_section todo_item_name">Primera cosa que hacer. Item name. Item name. Item
+                            name. Item name. Item name. Item name.</div>
+                        <div class="todo_item_section_heading">DESCRIPTION</div>
+                        <div class="todo_item_section todo_item_description">De esto sí que no me puedo olvidar, ¿eh?
                         </div>
+                        <div class="todo_item_section_heading">DUE DATE</div>
+                        <div class="todo_item_section todo_item_dueDate">2019-June-04</div>
+                        <div class="todo_item_section_heading">URGENT</div>
+                        <div class="todo_item_section todo_item_isUrgent">Urgent</div>
+                        <div class="todo_item_section_heading">CATEGORY</div>
+                        <div class="todo_item_section todo_item_category">Personal | Groceries</div>
                     </div>
                 </div>
-            
-                <div class="todo_item_supercontainer col-md-6 col-lg-4">
-                        <div id="todo_item_container_id_2" class="todo_item_container card">
-                                <div id="todo_item_ul_id_2" class="todo_item_ul">
-                                        <div class="todo_item todo_item_name">Primera cosa que hacer</div>
-                                        <div class="todo_item todo_item_description">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</div>
-                                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
-                                        <div class="todo_item todo_item_isUrgent">Urgent</div>
-                                        <div class="todo_item todo_item_category">Personal | Groceries</div>
-                                </div>
+            </div>
+
+            <div class="todo_item_supercontainer col-md-6 col-lg-4">
+                <div id="todo_item_container_id_2" class="todo_item_container card">
+                    <div id="todo_item_ul_id_2" class="todo_item_ul">
+                        <div class="todo_item todo_item_name">Primera cosa que hacer</div>
+                        <div class="todo_item todo_item_description">It is a long established fact that a reader will be
+                            distracted by the readable content of a page when looking at its layout. The point of using
+                            Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to
+                            using 'Content here, content here', making it look like readable English. Many desktop
+                            publishing packages and web page editors now use Lorem Ipsum as their default model text,
+                            and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various
+                            versions have evolved over the years, sometimes by accident, sometimes on purpose (injected
+                            humour and the like).</div>
+                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
+                        <div class="todo_item todo_item_isUrgent">Urgent</div>
+                        <div class="todo_item todo_item_category">Personal | Groceries</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="todo_item_supercontainer col-md-6 col-lg-4">
+                <div id="todo_item_container_id_3" class="todo_item_container card">
+                    <div id="todo_item_ul_id_3" class="todo_item_ul">
+                        <div class="todo_item todo_item_name">Segunda cosa que hacer</div>
+                        <div class="todo_item todo_item_description">De esto sí que no me puedo olvidar, ¿eh? Porque
+                            esta es la cosa más importante del mundo mundial</div>
+                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
+                        <div class="todo_item todo_item_isUrgent">Urgent</div>
+                        <div class="todo_item todo_item_category">Personal | Groceries</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="todo_item_supercontainer col-md-6 col-lg-4">
+                <div id="todo_item_container_id_4" class="todo_item_container card">
+                    <div id="todo_item_ul_id_4" class="todo_item_ul">
+                        <div class="todo_item todo_item_name">Super importante</div>
+                        <div class="todo_item todo_item_description">Porque esta es la cosa más importante del mundo
+                            mundial</div>
+                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
+                        <div class="todo_item todo_item_isUrgent">Urgent</div>
+                        <div class="todo_item todo_item_category">Personal | Groceries</div>
+                    </div>
+                </div>
+            </div>
+            <div class="todo_item_supercontainer col-md-6 col-lg-4">
+                <div id="todo_item_container_id_5" class="todo_item_container card">
+                    <div id="todo_item_ul_id_5" class="todo_item_ul">
+                        <div class="todo_item todo_item_name">Super importante</div>
+                        <div class="todo_item todo_item_description">De esto sí que no me puedo olvidar, ¿eh? Porque
+                            esta es la cosa más importante del mundo mundial. De esto sí que no me puedo olvidar, ¿eh?
+                            Porque esta es la cosa más importante del mundo mundial</div>
+                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
+                        <div class="todo_item todo_item_isUrgent">Urgent</div>
+                        <div class="todo_item todo_item_category">Personal | Groceries</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="todo_item_supercontainer col-md-6 col-lg-4">
+                <div id="todo_item_container_id_6" class="todo_item_container card">
+                    <div id="todo_item_ul_id_6" class="todo_item_ul">
+                        <div class="todo_item todo_item_name">Super importante</div>
+                        <div class="todo_item todo_item_description">It is a long established fact that a reader will be
+                            distracted by the readable content of a page when looking at its layout. The point of using
+                            Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to
+                            using 'Content here, content here', making it look like readable English. Many desktop
+                            publishing packages and web page editors now use Lorem Ipsum as their default model text,
+                            and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various
+                            versions have evolved over the years, sometimes by accident, sometimes on purpose (injected
+                            humour and the like).</div>
+                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
+                        <div class="todo_item todo_item_isUrgent">Urgent</div>
+                        <div class="todo_item todo_item_category">Personal | Groceries</div>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="todo_item_supercontainer col-md-6 col-lg-4">
-                        <div id="todo_item_container_id_3" class="todo_item_container card">
-                                <div id="todo_item_ul_id_3" class="todo_item_ul">
-                                        <div class="todo_item todo_item_name">Segunda cosa que hacer</div>
-                                        <div class="todo_item todo_item_description">De esto sí que no me puedo olvidar, ¿eh? Porque esta es la cosa más importante del mundo mundial</div>
-                                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
-                                        <div class="todo_item todo_item_isUrgent">Urgent</div>
-                                        <div class="todo_item todo_item_category">Personal | Groceries</div>
-                                </div>
-                    </div>
-                </div>
-
-                <div class="todo_item_supercontainer col-md-6 col-lg-4">
-                        <div id="todo_item_container_id_4" class="todo_item_container card">
-                                <div id="todo_item_ul_id_4" class="todo_item_ul">
-                                        <div class="todo_item todo_item_name">Super importante</div>
-                                        <div class="todo_item todo_item_description">Porque esta es la cosa más importante del mundo mundial</div>
-                                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
-                                        <div class="todo_item todo_item_isUrgent">Urgent</div>
-                                        <div class="todo_item todo_item_category">Personal | Groceries</div>
-                                </div>
-                    </div>
-                </div>
-                <div class="todo_item_supercontainer col-md-6 col-lg-4">
-                        <div id="todo_item_container_id_5" class="todo_item_container card">
-                                <div id="todo_item_ul_id_5" class="todo_item_ul">
-                                        <div class="todo_item todo_item_name">Super importante</div>
-                                        <div class="todo_item todo_item_description">De esto sí que no me puedo olvidar, ¿eh? Porque esta es la cosa más importante del mundo mundial. De esto sí que no me puedo olvidar, ¿eh? Porque esta es la cosa más importante del mundo mundial</div>
-                                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
-                                        <div class="todo_item todo_item_isUrgent">Urgent</div>
-                                        <div class="todo_item todo_item_category">Personal | Groceries</div>
-                                </div>
-                    </div>
-                </div>
-
-                <div class="todo_item_supercontainer col-md-6 col-lg-4">
-                        <div id="todo_item_container_id_6" class="todo_item_container card">
-                                <div id="todo_item_ul_id_6" class="todo_item_ul">
-                                        <div class="todo_item todo_item_name">Super importante</div>
-                                        <div class="todo_item todo_item_description">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</div>
-                                        <div class="todo_item todo_item_dueDate">2019-June-04</div>
-                                        <div class="todo_item todo_item_isUrgent">Urgent</div>
-                                        <div class="todo_item todo_item_category">Personal | Groceries</div>
-                                    </ul>
-                    </div>
-                </div>
+            </div>
 
         </div>
-            
     </div>
 
     <button id="remove_all_tasks_btn">Remove all items!</button>
 
-    
+
 
 </body>
 

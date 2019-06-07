@@ -85,8 +85,39 @@ li.todo_item_dueDate:before {
     overflow-y: auto;
 }
 
+span.text-in-btn {
+    position: relative;
+    top: -0.95rem;
+    left: 1rem;
+    font-size: 2rem;
+}
 
+#global_container_form {
+    display: none;
+}
 
+span.right-arrow {
+    position: relative;
+    top: 0rem;
+    left: 1.5rem;
+    font-size: 6rem;
+}
+
+#new_task_btn {
+    margin-top: 2.5rem;
+    margin-bottom: -1rem;
+    font-size: 2rem;
+}
+#new_task_form_submit_btn {
+    line-height: 1.3rem;
+    margin-bottom: 1.1rem;
+}
+
+.custom-checkbox {
+    position: relative;
+    top: 2.5rem;
+    left: 2rem;
+}
 
 
 .todo_item_dueDate {

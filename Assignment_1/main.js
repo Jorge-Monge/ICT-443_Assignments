@@ -15,6 +15,20 @@ TODO: Button to add a new item. It opens a form (kind of done)
 TODO: Upon form submission, the item appears in the page.
 TASK ORDER: If a task exist in that position, it will be inserted there, and
  old tasks will be moved forward one position.
+TODO: 
+The layout of the result is sort of done. Now add a button, 'NEW TASK', which
+will open a NEW TASK FORM.
+1. Upon submission, the object created will be appended
+to alist of objects.
+
+2. Upon submission, a new task card will be created,
+and inserted in the appropriate position (parentNode.insertBefore()).
+3. Elements after the inserted will need to increase their order value by 1.
+
+DELETE TASK: 
+1. Element is deleted.
+2. Elements after the deleted will need to decrease their order value by 1.
+
 */
 
 
