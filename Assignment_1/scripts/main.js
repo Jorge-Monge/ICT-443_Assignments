@@ -12,6 +12,11 @@ formData.append('functionName', 'connectToDb');
 /*
 
 TODO: Button to add a new item. It opens a form (kind of done)
+
+TODO: Clicking on New Task btn, the heading slides to the top and disappears.
+
+TODO: Clicking on New Task btn, the form appears.
+
 TODO: Upon form submission, the item appears in the page.
 TASK ORDER: If a task exist in that position, it will be inserted there, and
  old tasks will be moved forward one position.
@@ -81,17 +86,33 @@ function maxId(toDoListItems) {
 // CREATE THE TO-DO LIST
 let toDoList = new TodoList("todoList");
 
-let newTaskForm = document.querySelector("#new_task_form_id");
-
 let todo_item_list_container = document.querySelector("#todo_item_list_container");
 
 let toDoItem;
+
+
+// NEW TASK
+let jumbotronHeader = document.querySelector("header");
+let newTaskForm = document.querySelector("#global_container_form");
+
+let newTaskBtn = document.querySelector("header button");
+newTaskBtn.addEventListener("click", () => {
+    hideElemShowElem(jumbotronHeader, newTaskForm);
+});
+
+
+let formCancelBtn = document.querySelector("#new_task_form_cancel_btn");
+formCancelBtn.addEventListener("click", () => {
+    hideElemShowElem(newTaskForm, jumbotronHeader);
+});
+
 
 // Add item to toDoList on Submit Form.
 // Insert HTML for new item
 newTaskForm.addEventListener("submit", function (event) {
     event.preventDefault();
     console.log("click");
+    hideElemShowElem(newTaskForm, jumbotronHeader);
     let taskName = document.querySelector("#task_name_input_id").value;
     let taskDescription = document.querySelector("#task_description_input_id").value;
     /*
@@ -131,21 +152,6 @@ newTaskForm.addEventListener("submit", function (event) {
     createNewItemHtml(toDoItem);
 });
 
-/*
-<div id="shopping_list_container">
-<div id="todo_item_container_id" class="todo_item_container">
-    <ul id="todo_item_ul_id" class="todo_item_ul">
-        <li class="todo_item_order">1</li>
-        <li class="todo_item_name">Item Name</li>
-        <li class="todo_item_description">Item Description</li>
-        <li class="todo_item_due_date">2019-06-15</li>
-        <li class="todo_item_is_urgent">true</li>
-        <li class="todo_item_category">Personal | Groceries</li>
-    </ul>
-</div>
-</div>
-*/
-
 
 let remove_all_tasks_btn = document.querySelector("#remove_all_tasks_btn");
 
@@ -173,6 +179,20 @@ remove_all_tasks_btn.addEventListener("click", function () {
 });
 
 
+
+function hideElemShowElem(elem2Hide, elem2Show) {
+    hideElem(elem2Hide);
+    showElem(elem2Show);
+}
+
+function hideElem(elem2Hide) {
+    elem2Hide.classList.add("d-none");
+}
+
+function showElem(elem2Show) {
+    elem2Show.classList.remove("d-none");
+}
+
 function createNewItemHtml(toDoItem) {
 
     let arrayLiElems = itemPropertiesLiElems(toDoItem);
@@ -198,10 +218,6 @@ function createNewItemHtml(toDoItem) {
     // to-do item list <div> container
     todo_item_list_container.appendChild(todo_item_container_div);
 }
-
-//console.log(document.getElementsByClassName("todo_item_id")[0]);
-
-
 
 // REMOVE ITEM IN THE TO-DO LIST
 //let myList = new TodoList(todoList)

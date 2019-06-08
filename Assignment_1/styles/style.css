@@ -1,3 +1,43 @@
+body::-webkit-scrollbar {
+    width: 0 !important;
+}
+
+
+
+header.jumbotron h1{
+    font-size: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+header.jumbotron p{
+    font-size: 1rem;
+    font-weight: bolder;
+    color: rgb(140,140,140);
+    margin-top: 0rem;
+    padding-top: 0;
+}
+
+header.jumbotron {
+    padding: 0;
+}
+
+#new_task_btn {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+
+
+#todo_item_list_container {
+    margin-top: 2rem;
+}
+
+#global_container_form {
+    margin-top: 2rem;
+}
+
 .todo_item_ul {
     list-style-type: none; 
     /*background-color: red;*/
@@ -81,44 +121,9 @@ div.todo_item_container.card:before {
     background-color: red;
 }
 
-/*
-.todo_item:before {
-    font-size: 0.8rem;
-    position: absolute;
-    top: 0rem;
-    left: -0.1rem;
-    font-weight: bolder;
-}
-
-.todo_item_name:before {
-    content: "NAME";
-}
-
-.todo_item_description:before {
-    content: "DESCRIPTION";
-}
-
-li.todo_item_dueDate:before {
-    content: "DUE DATE";
-}
-
-.todo_item_isUrgent:before {
-    content: "URGENT";
-}
-
-.todo_item_category:before {
-    content: "CATEGORY";
-}
-
-*/
-
-
-
 .todo_item_description {
-    /*background-color:aquamarine;  */
     height: 8rem;
     overflow-y: auto;
-    
 }
 
 .scrollable-container {
@@ -132,9 +137,7 @@ span.text-in-btn {
     font-size: 2rem;
 }
 
-#global_container_form {
-    display: none;
-}
+
 
 span.right-arrow {
     position: relative;
@@ -143,14 +146,10 @@ span.right-arrow {
     font-size: 6rem;
 }
 
-#new_task_btn {
-    margin-top: 2.5rem;
-    margin-bottom: -1rem;
-    font-size: 2rem;
-}
-#new_task_form_submit_btn {
+#new_task_form_submit_btn, #new_task_form_cancel_btn {
     line-height: 1.3rem;
-    margin-bottom: 1.1rem;
+    margin-bottom: 1rem;
+    /*margin: 1.1rem;*/
 }
 
 .custom-checkbox {
@@ -181,4 +180,37 @@ span.right-arrow {
 
 .todo_item {
     
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+
+/* Small devices (landscape phones, 576px and up) */
+@media (max-width: 576px) {
+
+    .new_task_form_btn button {
+       font-size: 1.5rem;
+    }
+
+    header.jumbotron h1{
+        font-size: 1.6rem;
+    }
+
+    header.jumbotron p{
+        font-size: 0.8rem;
+        margin-bottom: 0rem;
+    }
+
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    header.jumbotron p{
+        margin-bottom: 0rem;
+    }
 }
