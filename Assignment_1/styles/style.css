@@ -6,7 +6,33 @@
 }
 
 i.fas {
-    color: yellow;
+    color: red;
+    margin-right: 0.6rem;
+}
+
+div.todo_item_container.card {
+    position: relative;
+    border-left: solid 3px red;
+    box-shadow: 0 0 1rem rgb(230,230,230);
+}
+
+div.todo_item_container.card:before {
+    position: absolute;
+    top: -1.0rem;
+    right: 1.5rem;
+    content: attr(data-before-content);
+    font-size: 1.5rem;
+    width: 3rem;
+    height: 3rem;
+    text-align: center;
+    color: red;
+    font-weight: bolder;
+    background-color: white;
+    border-radius: 100%;
+    padding-top: 0.3rem;
+    box-shadow: 0 0 0.8rem rgb(200,200,200);
+    z-index: 100;
+
 }
 
 .todo_item_id {
@@ -22,9 +48,11 @@ i.fas {
     font-size: 1rem;
 }
 
-
-
-
+.todo_item_container {
+    /*height: 23rem;*/
+    /*overflow: auto;*/
+    margin-bottom: 2rem;
+}
 
 .todo_item_order {
     /*background-color: aquamarine;*/
@@ -41,20 +69,51 @@ i.fas {
     font-size: 0.8rem;
     font-weight: bolder;
     position: relative;
-    color: yello;
-    box-shadow: 10px 10px red;
 }
-/*
+
 .todo_item_section_heading:after {
     position: absolute;
-    top: 1.2rem;
-    left: 0;
+    top: 0.55rem;
+    left: -0.6rem;
     content: "";
-    width:3rem;
+    width: 0.5rem;
     height:0.2rem;
     background-color: red;
 }
+
+/*
+.todo_item:before {
+    font-size: 0.8rem;
+    position: absolute;
+    top: 0rem;
+    left: -0.1rem;
+    font-weight: bolder;
+}
+
+.todo_item_name:before {
+    content: "NAME";
+}
+
+.todo_item_description:before {
+    content: "DESCRIPTION";
+}
+
+li.todo_item_dueDate:before {
+    content: "DUE DATE";
+}
+
+.todo_item_isUrgent:before {
+    content: "URGENT";
+}
+
+.todo_item_category:before {
+    content: "CATEGORY";
+}
+
 */
+
+
+
 .todo_item_description {
     /*background-color:aquamarine;  */
     height: 8rem;
@@ -102,15 +161,22 @@ span.right-arrow {
 
 
 .todo_item_dueDate {
-    /*background-color: rosybrown;*/ 
+    /*background-color: rosybrown;*/
+    
 }
 
 .todo_item_isUrgent {
-    /*background-color: cadetblue;*/ 
+    /*background-color: cadetblue;*/
+    
+   
+   
 }
 
 .todo_item_category {
-    /*background-color:  mediumpurple;*/ 
+    /*background-color:  mediumpurple;*/
+    
+    
+   
 }
 
 .todo_item {
