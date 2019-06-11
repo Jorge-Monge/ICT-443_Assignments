@@ -22,10 +22,9 @@ header.jumbotron {
     padding: 0;
 }
 
-#new_task_btn {
+#jumbotron_header button{
     margin-top: 1rem;
     margin-bottom: 1rem;
-    font-size: 2rem;
 }
 
 
@@ -45,9 +44,23 @@ header.jumbotron {
     padding: 0;
 }
 
-i.fas {
+footer.todo_item_actions_btns {
+    display: flex;
+    justify-content: flex-end;
+}
+
+footer i {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+i.fa-edit {
+    font-size: 1.45rem;
+}
+
+i.fa-edit:hover, i.fa-trash-alt:hover {
     color: red;
-    margin-right: 0.6rem;
 }
 
 div.todo_item_container.card {
@@ -209,8 +222,35 @@ span.right-arrow {
 
 }
 
-@media (min-width: 577px) and (max-width: 768px) {
+@media (min-width: 769px) and (max-width: 992px) {
     header.jumbotron p{
         margin-bottom: 0rem;
     }
+
+    #jumbotron_header button{
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
 }
+
+@media (max-width: 768px) {
+    header.jumbotron p{
+        margin-bottom: 0rem;
+    }
+
+    #jumbotron_header button{
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    header div#header_btns_container{
+       margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    header div.row {
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+

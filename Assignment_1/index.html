@@ -16,12 +16,26 @@
 <body>
     <header id="jumbotron_header" class="jumbotron jumbotron-fluid border-bottom border-dark">
         <div class="container">
+
             <div class="row">
-                <div class="col-lg-6 col-md-8 col-sm-12">
+                <div class="col-lg-6 col-12">
                     <h1 class="col-12 text-center">Just another task manager</h1>
                     <p class="col-12 lead text-center">Some Bootstrap, some JS, and a PHP back-end.</p>
                 </div>
-                <button id="new_task_btn" type="button" class="btn btn-primary col-lg-6 col-md-4 col-sm-12 ml-3 mr-3 ml-sm-0 mr-sm-0">New Task</button>
+
+                <div id="header_btns_container" class="row justify-content-between col-12 col-lg-6">
+                    <div class="row col-md-4 col-12">
+                        <button id="new_task_btn" type="button" class="btn btn-primary col-12">New Task</button>
+                    </div>
+                    <div class="row col-md-4 col-12">
+                        <button id="hide_tasks_btn" type="button" class="btn btn-secondary col-12 action_hide">Hide All</button>
+                    </div>
+                    <div class="row col-md-4 col-12">
+                        <button id="delete_tasks_btn" type="button" class="btn btn-warning col-12">Delete All</button>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </header>
@@ -79,16 +93,15 @@
                 </div>
 
                 <div class="new_task_form_btn col-sm-6">
-                        <button type="submit" id="new_task_form_submit_btn" class="btn btn-primary btn-lg col-12"><span
+                    <button type="submit" id="new_task_form_submit_btn" class="btn btn-primary btn-lg col-12"><span
                             class="">Submit Task</span></button>
                 </div>
                 <div class="new_task_form_btn col-sm-6">
-                    <button id="new_task_form_cancel_btn" class="btn btn-danger btn-lg col-12"><span
+                    <button type="button" id="new_task_form_cancel_btn" class="btn btn-danger btn-lg col-12"><span
                             class="">Cancel</span></button>
                 </div>
-                
+
             </form>
-            <button type="button" onclick="myFunction()">Try it</button>
         </div>
     </div>
 
@@ -113,6 +126,10 @@
                         <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>CATEGORY</div>
                         <div class="todo_item_section todo_item_category">Personal | Groceries</div>
                     </div>
+                    <footer class="todo_item_actions_btns">
+                            <i class="fas fa-edit"></i>
+                            <i class="far fa-trash-alt"></i>
+                    </footer>
                 </div>
             </div>
 
@@ -132,6 +149,11 @@
                         <div class="todo_item todo_item_isUrgent">Urgent</div>
                         <div class="todo_item todo_item_category">Personal | Groceries</div>
                     </div>
+                    <footer class="todo_item_actions_btns">
+                            <i class="fas fa-edit"></i>
+                            <i class="far fa-trash-alt"></i>
+                    </footer>
+                    
                 </div>
             </div>
 

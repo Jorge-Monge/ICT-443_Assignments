@@ -11,6 +11,8 @@ formData.append('functionName', 'connectToDb');
 
 /*
 
+TODO: Add icons for the EDIT TASK and DELETE TASK
+
 TODO: Upon form submission, the item appears in the page.
 TASK ORDER: If a task exist in that position, it will be inserted there, and
  old tasks will be moved forward one position.
@@ -25,6 +27,8 @@ and inserted in the appropriate position (parentNode.insertBefore()).
 DELETE TASK: 
 1. Element is deleted.
 2. Elements after the deleted will need to decrease their order value by 1.
+
+HIDE ALL TASKS - DONE
 
 */
 
@@ -84,7 +88,7 @@ function maxId(toDoListItems) {
 // CREATE THE TO-DO LIST
 let toDoList = new TodoList("todoList");
 
-let todo_item_list_container = document.querySelector("#todo_item_list_container");
+//let todo_item_list_container = document.querySelector("#todo_item_list_container");
 
 let toDoItem;
 
@@ -93,7 +97,7 @@ let toDoItem;
 let jumbotronHeader = document.querySelector("header");
 let newTaskForm = document.querySelector("#global_container_form");
 
-let newTaskBtn = document.querySelector("header button");
+let newTaskBtn = document.querySelector("header button#new_task_btn");
 newTaskBtn.addEventListener("click", () => {
     hideElemShowElem(jumbotronHeader, newTaskForm);
 });
@@ -109,10 +113,10 @@ formCancelBtn.addEventListener("click", () => {
 // whenever the Category select element changes.
 //
 let taskCategorySelect = document.querySelector("#task_category_input_id");
-taskCategorySelect.addEventListener("change", function() {
+taskCategorySelect.addEventListener("change", function () {
     taskCategoryIndex = taskCategorySelect.selectedIndex;
     // Concatenate cat. group + category for the value
-    taskCategorySelect.options[taskCategoryIndex].value = 
+    taskCategorySelect.options[taskCategoryIndex].value =
         GroupValuePlusSelectValue("task_category_input_id");
 });
 
@@ -129,7 +133,6 @@ newTaskForm.addEventListener("submit", function (event) {
     and will automatically perform a conversion to the current computer timezone.
     */
     let taskDueDate = document.querySelector("#task_due_date_input_id").value;
-    //console.log(taskDueDate);
 
     // Only in order to store a valid date in the database:
     let timeOffsetHours = (new Date().getTimezoneOffset() / 60).toString();
@@ -152,15 +155,63 @@ newTaskForm.addEventListener("submit", function (event) {
     );
 
     toDoList.addItem(toDoItem);
-
-    createNewItemHtml(toDoItem);
+    console.log(toDoItem);
+    //createNewItemHtml(toDoItem);
 });
 
 
-let remove_all_tasks_btn = document.querySelector("#remove_all_tasks_btn");
+let remove_all_tasks_btn = document.querySelector("#delete_tasks_btn");
 
-/*
+
+//
+// HIDE ALL THE TASKS UPON A BUTTON CLICK
+//
+let hide_all_tasks_btn = document.querySelector("#hide_tasks_btn");
+let todo_item_list_container = document.querySelector("#todo_item_list_container");
+hide_all_tasks_btn.addEventListener("click", () => {
+
+    if (hide_all_tasks_btn.classList.contains("action_hide")) {
+        hide_all_tasks_btn.innerHTML = "Show All";
+        hideElem(todo_item_list_container);
+    } else {
+        hide_all_tasks_btn.innerHTML = "Hide All";
+        showElem(todo_item_list_container)
+    }
+
+    hide_all_tasks_btn.classList.toggle("action_hide");
+
+});
+
+
+//
+// EDIT A TASK
+//
+let editTaskBtn = document.querySelector("i.fa-edit");
+editTaskBtn.addEventListener("click", () => {
+    console.log("Editing a task");
+});
+
+
+//
+// DELETE A TASK
+//
+let deleteTaskBtn = document.querySelector("i.fa-trash-alt");
+deleteTaskBtn.addEventListener("click", () => {
+    console.log("Deleting a task");
+});
+
+
+
+
+
+
+
+
+
+
 remove_all_tasks_btn.addEventListener("click", function () {
+
+    console.table(toDoList);
 
     /*
     let a = 1;
@@ -180,11 +231,16 @@ remove_all_tasks_btn.addEventListener("click", function () {
         //todo_item_list_container.removeChild(todo_item_list_container.firstChild)
 
     } // while ends
-    
+    */
+
 });
-*/
 
 
+
+
+//
+// FUNCTION DEFINITIONS 
+//
 
 function hideElemShowElem(elem2Hide, elem2Show) {
     hideElem(elem2Hide);
@@ -213,7 +269,7 @@ function GroupValuePlusSelectValue(selectId) {
     let selectValue = selectElem.value;
     let groupValue = selectElem.options[selectElemIndex].parentNode.label;
     let selectValuePlusSelectGroupValue = `${groupValue} | ${selectValue}`;
-    
+
     return selectValuePlusSelectGroupValue;
 }
 
@@ -262,7 +318,7 @@ function createNewItemHtml(toDoItem) {
 )
 */
 
-// FUNCTION DEFINITIONS    
+   
 async function httpPerformRequest(url, httpMethod, httpBody) {
     // This function is supposed to make an HTTP request to the back-end
     // and receive a JSON response.
