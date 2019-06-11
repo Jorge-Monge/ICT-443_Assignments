@@ -11,18 +11,10 @@ formData.append('functionName', 'connectToDb');
 
 /*
 
-TODO: Button to add a new item. It opens a form (kind of done)
-
-TODO: Clicking on New Task btn, the heading slides to the top and disappears.
-
-TODO: Clicking on New Task btn, the form appears.
-
 TODO: Upon form submission, the item appears in the page.
 TASK ORDER: If a task exist in that position, it will be inserted there, and
  old tasks will be moved forward one position.
 TODO: 
-The layout of the result is sort of done. Now add a button, 'NEW TASK', which
-will open a NEW TASK FORM.
 1. Upon submission, the object created will be appended
 to alist of objects.
 
@@ -43,6 +35,7 @@ httpPerformRequest(url, httpMethod, formData)
     .then(res => console.log(res))
 */
 
+// OBJECT that models a to-do task (item)
 class ToDoItem {
     constructor(id, order, name, description, dueDate, isUrgent, category) {
         this.id = id;
@@ -56,6 +49,11 @@ class ToDoItem {
     }
 }
 
+/* OBJECT that models a to-do task list
+  (this is in preparation for an eventual linking between a
+  users and their specific to-do task lists. For instance, 
+  user A would be linked to list A, user B to list B...)
+  */
 class TodoList {
     constructor(name) {
         this.name = name;
@@ -107,11 +105,22 @@ formCancelBtn.addEventListener("click", () => {
 });
 
 
+// Make the Category input value appear as <Category Group> | <Category Value>
+// whenever the Category select element changes.
+//
+let taskCategorySelect = document.querySelector("#task_category_input_id");
+taskCategorySelect.addEventListener("change", function() {
+    taskCategoryIndex = taskCategorySelect.selectedIndex;
+    // Concatenate cat. group + category for the value
+    taskCategorySelect.options[taskCategoryIndex].value = 
+        GroupValuePlusSelectValue("task_category_input_id");
+});
+
+
 // Add item to toDoList on Submit Form.
 // Insert HTML for new item
 newTaskForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    console.log("click");
     hideElemShowElem(newTaskForm, jumbotronHeader);
     let taskName = document.querySelector("#task_name_input_id").value;
     let taskDescription = document.querySelector("#task_description_input_id").value;
@@ -129,13 +138,8 @@ newTaskForm.addEventListener("submit", function (event) {
 
     let taskIsUrgentBool = document.querySelector("#task_is_urgent_id").checked;
     let taskIsUrgent = (taskIsUrgentBool) ? "&#9745;" : "&#9744;";
-    let taskCategorySelect = document.querySelector("#task_category_input_id");
-    let taskCategoryIndex = taskCategorySelect.selectedIndex;
-    let taskPartialCategory = taskCategorySelect.value;
-    let taskCategoryGroup = taskCategorySelect.options[taskCategoryIndex].parentNode.label;
-    let taskCategory = `${taskPartialCategory} | ${taskCategoryGroup}`;
+    let taskCategory = taskCategorySelect.value;
     let taskOrder = document.querySelector("#task_order_input_id").value;
-    console.log("taskOrder:", taskOrder);
 
     toDoItem = new ToDoItem(
         maxId(toDoList.items) + 1,
@@ -155,6 +159,7 @@ newTaskForm.addEventListener("submit", function (event) {
 
 let remove_all_tasks_btn = document.querySelector("#remove_all_tasks_btn");
 
+/*
 remove_all_tasks_btn.addEventListener("click", function () {
 
     /*
@@ -166,7 +171,7 @@ remove_all_tasks_btn.addEventListener("click", function () {
             break
         }
     }
-    */
+    
     
     while (todo_item_list_container.firstElementChild &&
         todo_item_list_container.firstElementChild.classList.contains("todo_item_container")) {
@@ -174,9 +179,10 @@ remove_all_tasks_btn.addEventListener("click", function () {
 
         //todo_item_list_container.removeChild(todo_item_list_container.firstChild)
 
-    }
+    } // while ends
     
 });
+*/
 
 
 
@@ -191,6 +197,24 @@ function hideElem(elem2Hide) {
 
 function showElem(elem2Show) {
     elem2Show.classList.remove("d-none");
+}
+
+function GroupValuePlusSelectValue(selectId) {
+
+    /* ARGUMENT
+        The id of a SELECT DOM element.
+       PURPOSE
+        To concatenate the value of the SELECT element plus the value (the label, that is it)
+        of the OPTGROUP element that is the parent of the SELECT elem.
+    */
+    //
+    let selectElem = document.getElementById(selectId);
+    let selectElemIndex = selectElem.selectedIndex;
+    let selectValue = selectElem.value;
+    let groupValue = selectElem.options[selectElemIndex].parentNode.label;
+    let selectValuePlusSelectGroupValue = `${groupValue} | ${selectValue}`;
+    
+    return selectValuePlusSelectGroupValue;
 }
 
 function createNewItemHtml(toDoItem) {
