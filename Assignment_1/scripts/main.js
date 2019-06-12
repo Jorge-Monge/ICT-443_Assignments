@@ -11,22 +11,28 @@ let itemsArray = [];
 let item = "";
 
 /*
-TODO: Handle what happens when the user does not introduce an order value
 
-TODO: Upon form submission, the item appears in the page.
-    - Duplicate the template HTML
-    - Populate it with the task data.
+TODO: Handle what happens when the user does not introduce an order value
 
 TASK ORDER: If a task exist in that position, it will be inserted there, and
  old tasks will be moved forward one position.
 TODO: 
 
-1. Upon submission, the object created will be appended
-to alist of objects (DONE)
-
 2. Upon submission, a new task card will be created,
 and inserted in the appropriate position (parentNode.insertBefore()).
 3. Elements after the inserted will need to increase their order value by 1.
+
+Tasks order is already handled in the object.
+
+When a new task is created, we are inserting it last.
+Instead, we need to identify the HTML block with order = newOrderValue OR
+max(orders) where order < newOrderValue.
+>>>>>>
+
+If max(orders) = newOrderValue, we need to increase the orders in the HTML tasks,
+before inserting the new task, and only where orderValue >= newOrderValue
+
+
 
 DELETE TASK: 
 1. Element is deleted.
@@ -35,10 +41,7 @@ DELETE TASK:
 
 
 
-/*
-httpPerformRequest(url, httpMethod, formData)
-    .then(res => console.log(res))
-*/
+
 
 // OBJECT that models a to-do task (item)
 class ToDoItem {
@@ -84,21 +87,57 @@ let toDoList = new TodoList("todoList-ICT443");
 
 let toDoItem;
 
-
-// NEW TASK
+//
+// SUBMIT NEW TASK
+//
 let jumbotronHeader = document.querySelector("header");
-let newTaskForm = document.querySelector("#global_container_form");
-
+let newTaskFormContainer = document.querySelector("#global_container_form");
+let newTaskForm = document.querySelector("#new_task_form_id");
 let newTaskBtn = document.querySelector("header button#new_task_btn");
+let maxOrderValue = 0;
+
 newTaskBtn.addEventListener("click", () => {
-    hideElemShowElem(jumbotronHeader, newTaskForm);
+
+    // Clear the form values
+    clearFormValues(newTaskForm);
+
+    // Pre-fills the order value with the next logical number
+    maxOrderValue = maxValue(toDoList.items, "order");
+    populateOrderValue(maxOrderValue);
+
+    // Modify input validation to allow ONLY
+    // 0 < newOrderValue <= (max(ExistingOrderValues) + 1)
+    // In other words, we are NOT ALLOWING GAPS in the order values,
+    // you either enter the next value, or substitute one of the existing ones.
+    let taskOrderInput = document.querySelector("#task_order_input_id");
+    taskOrderInput.setAttribute("max", maxOrderValue + 1);
+
+    // Hide the Jumbotron header, show the form
+    hideElemShowElem(jumbotronHeader, newTaskFormContainer);
+     
+});
+
+//
+// RESET NEW TASK FORM
+//
+let formClearBtn = document.querySelector("#new_task_form_clear_btn");
+formClearBtn.addEventListener("click", () => {
+    clearFormValues(newTaskForm);
+    // Pre-fills the order value with the next logical number
+    maxOrderValue = maxValue(toDoList.items, "order");
+    populateOrderValue(maxOrderValue);
 });
 
 
+//
+// CANCEL NEW TASK SUBMISSION
+//
 let formCancelBtn = document.querySelector("#new_task_form_cancel_btn");
 formCancelBtn.addEventListener("click", () => {
-    hideElemShowElem(newTaskForm, jumbotronHeader);
+    hideElemShowElem(newTaskFormContainer, jumbotronHeader);
 });
+
+
 
 
 // Make the Category input value appear as <Category Group> | <Category Value>
@@ -115,11 +154,11 @@ taskCategorySelect.addEventListener("change", function () {
 
 // Add item to toDoList on Submit Form.
 // Insert HTML for new item
-newTaskForm.addEventListener("submit", function (event) {
+newTaskFormContainer.addEventListener("submit", function (event) {
     event.preventDefault();
 
     // Hide the form. Show the header.
-    hideElemShowElem(newTaskForm, jumbotronHeader);
+    hideElemShowElem(newTaskFormContainer, jumbotronHeader);
 
     // Store the form data in variables
     let taskOrder = parseInt(document.querySelector("#task_order_input_id").value);
@@ -149,7 +188,7 @@ newTaskForm.addEventListener("submit", function (event) {
     // a "slot" in the list of tasks for the new task, let's create
     // a new instance of the ToDoItem object    
     toDoItem = new ToDoItem(
-        maxId(toDoList.items) + 1, // sequential, internal ID
+        maxValue(toDoList.items, "id") + 1, // sequential, internal ID
         taskOrder,
         taskCategory,
         taskName,
@@ -165,7 +204,6 @@ newTaskForm.addEventListener("submit", function (event) {
     let prototype_html_card = document.querySelector(".todo_item_card_prototype");
     let newItemHtml = createNewItemHtml(prototype_html_card, toDoItem);
     newItemHtml.classList.remove("d-none");
-    console.log(prototype_html_card.parentNode);
     prototype_html_card.parentNode.appendChild(newItemHtml);
 
     // Append the new task HTML to the page in
@@ -257,14 +295,14 @@ remove_all_tasks_btn.addEventListener("click", function () {
 // FUNCTION DEFINITIONS 
 //
 
-function maxId(toDoListItems) {
-    let maxId = 0;
+function maxValue(toDoListItems, property) {
+    let maxValue = 0;
     for (elm of toDoListItems) {
-        if (elm.id > maxId) {
-            maxId = elm.id;
+        if (elm[property] > maxValue) {
+            maxValue = elm[property];
         }
     }
-    return maxId;
+    return maxValue;
 }
 
 function hideElemShowElem(elem2Hide, elem2Show) {
@@ -278,6 +316,14 @@ function hideElem(elem2Hide) {
 
 function showElem(elem2Show) {
     elem2Show.classList.remove("d-none");
+}
+
+function clearFormValues(formElem) {
+    formElem.reset();
+}
+
+function populateOrderValue(maxOrderValue) {
+    newTaskFormContainer.querySelector("#task_order_input_id").value = maxOrderValue + 1;
 }
 
 function GroupValuePlusSelectValue(selectId) {

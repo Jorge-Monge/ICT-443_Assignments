@@ -28,7 +28,8 @@
                         <button id="new_task_btn" type="button" class="btn btn-primary col-12">New Task</button>
                     </div>
                     <div class="row col-md-4 col-12">
-                        <button id="hide_tasks_btn" type="button" class="btn btn-secondary col-12 action_hide">Hide All</button>
+                        <button id="hide_tasks_btn" type="button" class="btn btn-secondary col-12 action_hide">Hide
+                            All</button>
                     </div>
                     <div class="row col-md-4 col-12">
                         <button id="delete_tasks_btn" type="button" class="btn btn-warning col-12">Delete All</button>
@@ -46,12 +47,13 @@
 
                 <div class="form-group col-md-2">
                     <label for="task_order_input_id">Order #</label>
-                    <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id" class="form-control">
+                    <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id" class="form-control" required>
                 </div>
 
                 <div class="form-group col-md-3">
                     <label for="task_category_input_id">Category</label>
                     <select name="task_category" id="task_category_input_id" class="form-control" required>
+                            <option value=""></option>
                         <optgroup label="Personal">
                             <option value="Groceries">Groceries</option>
                             <option value="Working Out">Working Out</option>
@@ -92,14 +94,21 @@
                     <textarea name="task_description" id="task_description_input_id" class="form-control"></textarea>
                 </div>
 
-                <div class="new_task_form_btn col-sm-6">
-                    <button type="submit" id="new_task_form_submit_btn" class="btn btn-primary btn-lg col-12"><span
-                            class="">Submit Task</span></button>
+                <div id="form_submit_clear_cancel_btns" class="row col-12 align-items-center justify-content-between">
+                    <div class="new_task_form_btn col-sm-4">
+                        <button type="submit" id="new_task_form_submit_btn" class="btn btn-primary btn-lg col-12"><span
+                                class="">Submit</span></button>
+                    </div>
+                    <div class="new_task_form_btn col-sm-4">
+                        <button type="button" id="new_task_form_clear_btn" class="btn btn-secondary btn-lg col-12"><span
+                                class="">Clear</span></button>
+                    </div>
+                    <div class="new_task_form_btn col-sm-4">
+                        <button type="button" id="new_task_form_cancel_btn" class="btn btn-danger btn-lg col-12"><span
+                                class="">Cancel</span></button>
+                    </div>
                 </div>
-                <div class="new_task_form_btn col-sm-6">
-                    <button type="button" id="new_task_form_cancel_btn" class="btn btn-danger btn-lg col-12"><span
-                            class="">Cancel</span></button>
-                </div>
+
 
             </form>
         </div>
@@ -125,13 +134,13 @@
                         <div class="todo_item_section todo_item_category"></div>
                     </div>
                     <footer class="todo_item_actions_btns">
-                            <i class="fas fa-edit"></i>
-                            <i class="far fa-trash-alt"></i>
+                        <i class="fas fa-edit"></i>
+                        <i class="far fa-trash-alt"></i>
                     </footer>
                 </div>
             </div>
 
-            </div>
+        </div>
     </div>
 
 </body>

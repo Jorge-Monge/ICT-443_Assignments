@@ -159,10 +159,15 @@ span.right-arrow {
     font-size: 6rem;
 }
 
-#new_task_form_submit_btn, #new_task_form_cancel_btn {
+#new_task_form_submit_btn, #new_task_form_cancel_btn, #new_task_form_clear_btn {
     line-height: 1.3rem;
     margin-bottom: 1rem;
     /*margin: 1.1rem;*/
+}
+
+#form_submit_clear_cancel_btns {
+    margin-right: 0;
+    margin-left: 0;
 }
 
 .custom-checkbox {
