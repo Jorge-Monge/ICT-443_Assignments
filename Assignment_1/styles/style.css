@@ -37,7 +37,7 @@ header.jumbotron {
     margin-top: 2rem;
 }
 
-.todo_item_ul {
+.todo_item_list {
     list-style-type: none; 
     /*background-color: red;*/
     margin: 0.5rem;

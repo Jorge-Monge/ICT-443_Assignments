@@ -1,24 +1,28 @@
+//
+// Front-End code corresponding to a task management web application.
+//
+// Author: Jorge Monge
+// Date: June 2019
+//
+
 
 // Global variables
 let itemsArray = [];
 let item = "";
 
-// Get the shopping list items from the database
-let url = 'server_code.php';
-let httpMethod = 'POST';
-let formData = new FormData();
-formData.append('functionName', 'connectToDb');
-
 /*
-
-TODO: Add icons for the EDIT TASK and DELETE TASK
+TODO: Handle what happens when the user does not introduce an order value
 
 TODO: Upon form submission, the item appears in the page.
+    - Duplicate the template HTML
+    - Populate it with the task data.
+
 TASK ORDER: If a task exist in that position, it will be inserted there, and
  old tasks will be moved forward one position.
 TODO: 
+
 1. Upon submission, the object created will be appended
-to alist of objects.
+to alist of objects (DONE)
 
 2. Upon submission, a new task card will be created,
 and inserted in the appropriate position (parentNode.insertBefore()).
@@ -27,9 +31,6 @@ and inserted in the appropriate position (parentNode.insertBefore()).
 DELETE TASK: 
 1. Element is deleted.
 2. Elements after the deleted will need to decrease their order value by 1.
-
-HIDE ALL TASKS - DONE
-
 */
 
 
@@ -41,15 +42,14 @@ httpPerformRequest(url, httpMethod, formData)
 
 // OBJECT that models a to-do task (item)
 class ToDoItem {
-    constructor(id, order, name, description, dueDate, isUrgent, category) {
+    constructor(id, order, category, name, dueDate, isUrgent, description) {
         this.id = id;
         this.order = order;
+        this.category = category;
         this.name = name;
-        this.description = description;
         this.dueDate = dueDate;
         this.isUrgent = isUrgent;
-        this.category = category;
-
+        this.description = description;
     }
 }
 
@@ -75,18 +75,10 @@ class TodoList {
     }
 }
 
-function maxId(toDoListItems) {
-    let maxId = 0;
-    for (elm of toDoListItems) {
-        if (elm.id > maxId) {
-            maxId = elm.id;
-        }
-    }
-    return maxId;
-}
+
 
 // CREATE THE TO-DO LIST
-let toDoList = new TodoList("todoList");
+let toDoList = new TodoList("todoList-ICT443");
 
 //let todo_item_list_container = document.querySelector("#todo_item_list_container");
 
@@ -125,38 +117,61 @@ taskCategorySelect.addEventListener("change", function () {
 // Insert HTML for new item
 newTaskForm.addEventListener("submit", function (event) {
     event.preventDefault();
+
+    // Hide the form. Show the header.
     hideElemShowElem(newTaskForm, jumbotronHeader);
-    let taskName = document.querySelector("#task_name_input_id").value;
-    let taskDescription = document.querySelector("#task_description_input_id").value;
-    /*
-    JavaScript, without any information about the timezone, will consider the date as UTC,
-    and will automatically perform a conversion to the current computer timezone.
-    */
-    let taskDueDate = document.querySelector("#task_due_date_input_id").value;
 
-    // Only in order to store a valid date in the database:
-    let timeOffsetHours = (new Date().getTimezoneOffset() / 60).toString();
-    let taskDueDateWithTimeZone =
-        new Date(`${taskDueDate} 00:00:00 -${timeOffsetHours.padStart(2, "0")}00`);
-
-    let taskIsUrgentBool = document.querySelector("#task_is_urgent_id").checked;
-    let taskIsUrgent = (taskIsUrgentBool) ? "&#9745;" : "&#9744;";
+    // Store the form data in variables
+    let taskOrder = parseInt(document.querySelector("#task_order_input_id").value);
     let taskCategory = taskCategorySelect.value;
-    let taskOrder = document.querySelector("#task_order_input_id").value;
+    let taskName = document.querySelector("#task_name_input_id").value;
+    let taskDueDateWithTimeZone = getDueDateWithTimeZone(document.querySelector("#task_due_date_input_id").value);
+    let taskIsUrgent = document.querySelector("#task_is_urgent_id").checked;
+    let taskDescription = document.querySelector("#task_description_input_id").value;
 
+    // Check whether there is a task with the same order value
+    let orderValueExists = false;
+    if (toDoList.items.length > 0) {
+        orderValueExists = checkSameOrderValueInTasks(toDoList, taskOrder);
+    } 
+    
+    /* If TRUE (a task exist with same order value as the one entered):
+        - Add 1 to order value of all tasks objects with order value >= order value of new task.
+        - Parse the HTML task elements and, for all tasks objects with order value >= order value
+          of new task, edit the task order number to represent <old order number> + 1. */
+
+    if (orderValueExists) {
+        increaseOrderValue(toDoList, taskOrder);
+        //increaseOrderValueInHtml(taskOrder);
+    } 
+    
+    // Now that we have created (if the same taskOrder existed already)
+    // a "slot" in the list of tasks for the new task, let's create
+    // a new instance of the ToDoItem object    
     toDoItem = new ToDoItem(
-        maxId(toDoList.items) + 1,
+        maxId(toDoList.items) + 1, // sequential, internal ID
         taskOrder,
+        taskCategory,
         taskName,
-        taskDescription,
-        taskDueDate,
+        taskDueDateWithTimeZone,
         taskIsUrgent,
-        taskCategory
+        taskDescription
     );
 
+    // Add item to list of items
     toDoList.addItem(toDoItem);
-    console.log(toDoItem);
-    //createNewItemHtml(toDoItem);
+
+    // Create the HTML corresponding to the new task
+    let prototype_html_card = document.querySelector(".todo_item_card_prototype");
+    let newItemHtml = createNewItemHtml(prototype_html_card, toDoItem);
+    newItemHtml.classList.remove("d-none");
+    console.log(prototype_html_card.parentNode);
+    prototype_html_card.parentNode.appendChild(newItemHtml);
+
+    // Append the new task HTML to the page in
+    // the correct insertion point
+    document.app
+    //insertNewItemHtml(newItemHtml);
 });
 
 
@@ -242,6 +257,16 @@ remove_all_tasks_btn.addEventListener("click", function () {
 // FUNCTION DEFINITIONS 
 //
 
+function maxId(toDoListItems) {
+    let maxId = 0;
+    for (elm of toDoListItems) {
+        if (elm.id > maxId) {
+            maxId = elm.id;
+        }
+    }
+    return maxId;
+}
+
 function hideElemShowElem(elem2Hide, elem2Show) {
     hideElem(elem2Hide);
     showElem(elem2Show);
@@ -273,31 +298,102 @@ function GroupValuePlusSelectValue(selectId) {
     return selectValuePlusSelectGroupValue;
 }
 
-function createNewItemHtml(toDoItem) {
+function getDueDateWithTimeZone(dateString = '1970-01-01') {
+    /*
+    The due date is obtained from the form as a string (like '2019-06-11'). When that string
+    is converted to a Date object, the string is taken as corresponding to local
+    (computer system) time zone. For instance, in Eastern Canada (GMT-6), a user could
+    epoch IN UTC. Its representation could be something like '2019-06-12 00:00:00 GMT'.
+    
+    Then, when we parse the date back to a string (for instance, when generating the HTML for the
+    tasks), the date would be "stringified" to the local time zone. Its representation could be 
+    something like 'Tue Jun 11 2019 18:00:00 GMT-0600 (Mountain Daylight Time)'.
 
-    let arrayLiElems = itemPropertiesLiElems(toDoItem);
+    As it can be seen, a date entered as day 12, could end up appearing in a task card as day 11.
+    */
 
-    // Create <ul> element
-    let todo_item_ul = document.createElement("ul");
-    todo_item_ul.setAttribute("id", toDoItem.id);
+    let timeOffsetHours = (new Date().getTimezoneOffset() / 60).toString();
+    let taskDueDateWithTimeZone =
+        new Date(`${dateString} 00:00:00 -${timeOffsetHours.padStart(2, "0")}00`);
+    
+        return taskDueDateWithTimeZone;
+}
 
-    // Append <li>s as children of <ul>
-    for (let e of arrayLiElems) {
-        todo_item_ul.appendChild(e);
+function checkSameOrderValueInTasks(toDoList, taskOrder) {
+    /*
+    TODOLIST
+    toDoList object, whose ToDoItem objects will be iterated to check
+    whether any of them has the same task order value as the second 
+    function parameter.
+    TASKORDER
+    The task order value of the task input from the form.
+
+    PURPOSE
+    To check whether the task order value entered for the new task already
+    exists in any of the previously entered tasks.
+    */
+    let check = false;
+    toDoList.items.forEach((e) => {
+        if (e.order == taskOrder) {
+            check = true;
+        }
+    });
+
+    return check ? true: false;
     }
 
-    // Create <div> as a container of a to-do item
-    let todo_item_container_div = document.createElement("div")
-    todo_item_container_div.setAttribute("id", "todo_item_container_" + toDoItem.id);
-    todo_item_container_div.setAttribute("class", "todo_item_container");
+function increaseOrderValue(toDoList, taskOrder) {
+        /*
+        TODOLIST
+        An instance of a ToDoList class.
+        TASKORDER
+        An integer representing a task order
 
-    // Append <ul> as child of the to-do item <div> container
-    todo_item_container_div.appendChild(todo_item_ul);
+        PURPOSE
+        The function iterates the tasks within the toDoList object
+        (the first function argument), and adds 1 to order value of
+        all tasks with order value >= taskOrder (the second function argument)
+        */
 
-    // Append the to-do item <div> container to the
-    // to-do item list <div> container
-    todo_item_list_container.appendChild(todo_item_container_div);
+       let check = false;
+       toDoList.items.forEach((e) => {
+           if (e.order >= taskOrder) {
+               e.order += 1;
+           }
+       });
+    }
+    
+function createNewItemHtml(prototype_html_card, toDoItem) {
+    
+    let newHtmlCard = prototype_html_card.cloneNode(true);
+    // Task ID, task Order
+    let a = newHtmlCard.querySelector(".todo_item_card_prototype>div");
+    a.setAttribute("data-id", toDoItem.id);
+    a.setAttribute("data-order", toDoItem.order);
+    a.setAttribute("data-before-content", toDoItem.order);
+    // Task category
+    b = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_category");
+    b.appendChild(document.createTextNode(toDoItem.category));
+    // Task name
+    let c = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_name");
+    c.appendChild(document.createTextNode(toDoItem.name));
+    // Due date
+    let d = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_dueDate");
+    let year = toDoItem.dueDate.getFullYear();
+    let month = toDoItem.dueDate.getMonth() + 1;
+    let day = toDoItem.dueDate.getDate();
+    d.appendChild(document.createTextNode(`${year}-${month}-${day}`));
+    // Urgent
+    let e = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_isUrgent");
+    e.appendChild(document.createTextNode(toDoItem.isUrgent));
+    // Description
+    let f = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_description");
+    f.appendChild(document.createTextNode(toDoItem.description));
+
+    return newHtmlCard;
 }
+
+
 
 // REMOVE ITEM IN THE TO-DO LIST
 //let myList = new TodoList(todoList)
@@ -318,7 +414,7 @@ function createNewItemHtml(toDoItem) {
 )
 */
 
-   
+
 async function httpPerformRequest(url, httpMethod, httpBody) {
     // This function is supposed to make an HTTP request to the back-end
     // and receive a JSON response.
