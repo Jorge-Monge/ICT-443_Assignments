@@ -20,19 +20,19 @@
             <div class="row">
                 <div class="col-lg-6 col-12">
                     <h1 class="col-12 text-center">Just another task manager</h1>
-                    <p class="col-12 lead text-center">Some Bootstrap, some JS, and a PHP back-end.</p>
+                    <p class="col-12 lead text-center">Some Bootstrap, some JS (and a future PHP back-end)</p>
                 </div>
 
                 <div id="header_btns_container" class="row justify-content-between col-12 col-lg-6">
                     <div class="row col-md-4 col-12">
-                        <button id="new_task_btn" type="button" class="btn btn-primary col-12">New Task</button>
+                        <button id="new_task_btn" type="button" class="btn btn-secondary col-12">New Task</button>
                     </div>
                     <div class="row col-md-4 col-12">
-                        <button id="hide_tasks_btn" type="button" class="btn btn-secondary col-12 action_hide">Hide
+                        <button id="hide_tasks_btn" type="button" class="btn btn-secondary col-12" disabled>Hide
                             All</button>
                     </div>
                     <div class="row col-md-4 col-12">
-                        <button id="delete_tasks_btn" type="button" class="btn btn-warning col-12">Delete All</button>
+                        <button id="delete_tasks_btn" type="button" class="btn btn-secondary col-12" disabled>Delete All</button>
                     </div>
 
                 </div>
@@ -96,16 +96,13 @@
 
                 <div id="form_submit_clear_cancel_btns" class="row col-12 align-items-center justify-content-between">
                     <div class="new_task_form_btn col-sm-4">
-                        <button type="submit" id="new_task_form_submit_btn" class="btn btn-primary btn-lg col-12"><span
-                                class="">Submit</span></button>
+                        <button type="submit" id="new_task_form_submit_btn" class="btn btn-secondary btn-lg col-12">Submit</button>
                     </div>
                     <div class="new_task_form_btn col-sm-4">
-                        <button type="button" id="new_task_form_clear_btn" class="btn btn-secondary btn-lg col-12"><span
-                                class="">Clear</span></button>
+                        <button type="button" id="new_task_form_clear_btn" class="btn btn-secondary btn-lg col-12">Clear</button>
                     </div>
                     <div class="new_task_form_btn col-sm-4">
-                        <button type="button" id="new_task_form_cancel_btn" class="btn btn-danger btn-lg col-12"><span
-                                class="">Cancel</span></button>
+                        <button type="button" id="new_task_form_cancel_btn" class="btn btn-secondary btn-lg col-12">Cancel</button>
                     </div>
                 </div>
 
@@ -118,7 +115,7 @@
     <div id="todo_item_list_container" class="container container-fluid">
         <div class="row">
 
-            <div class=" todo_item_card_prototype todo_item_supercontainer col-md-6 col-lg-4 d-none">
+            <div class="todo_item_card_prototype todo_item_supercontainer col-md-6 col-lg-4 d-none">
                 <div data-id="" data-order="" data-before-content="" class="todo_item_container card">
                     <div class="todo_item_list">
                         <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>NAME</div>
@@ -134,8 +131,8 @@
                         <div class="todo_item_section todo_item_category"></div>
                     </div>
                     <footer class="todo_item_actions_btns">
-                        <i class="fas fa-edit"></i>
-                        <i class="far fa-trash-alt"></i>
+                        <i id="edit_task_btn" class="task_action_btn fas fa-edit"></i>
+                        <i id="delete_task_btn" class="task_action_btn far fa-trash-alt"></i>
                     </footer>
                 </div>
             </div>
