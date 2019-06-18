@@ -1,0 +1,222 @@
+/*
+//
+// This is the stylesheet of the "Task Manager" web app.,
+// presented as an exercise for the UoC course: ICT-443 Javascript Advanced
+//
+// Author: Jorge Monge
+// Date: 2019-June-13
+//
+*/
+
+
+/* Hide the page scroll bar*/
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* The page header */
+header.jumbotron {
+    padding: 1rem 0 1rem 0;
+
+}
+
+header.jumbotron h1{
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+header.jumbotron p{
+    font-size: 1rem;
+    font-weight: bolder;
+    color: rgb(140,140,140);
+    padding: 0.1rem 0 0.5rem 0;
+}
+
+#jumbotron_header button{
+    margin: 0.8rem auto;
+}
+
+/* The buttons on the page header*/
+.btn-secondary:enabled:hover {
+    background-color: #006dcc;
+    box-shadow: 0 0 10px rgb(140,140,140); 
+}
+
+#delete_tasks_btn:enabled:hover {
+    background-color: #d9534f;
+}
+
+.btn-secondary:disabled {
+    opacity: 0.6;
+}
+
+/* The task cards */
+#global_container_form {
+    margin-top: 2rem;
+}
+
+#todo_item_list_container {
+    margin-top: 2rem;
+    list-style-type: none; 
+}
+
+div.todo_item_container.card {
+    background-color: rgba(0,109,204,0.1);
+    padding: 0.5rem;
+    border-left: solid 3px red;
+    box-shadow: 0 0 1rem rgb(230,230,230);
+}
+
+div.todo_item_container.card.urgent {
+    background-color: rgba(217,83,79,0.2);
+}
+
+/* The order number on the top right corner of the task card */
+div.todo_item_container.card:before {
+    position: absolute;
+    top: -1.0rem;
+    right: 1.5rem;
+    content: attr(data-before-content);
+    font-size: 1.5rem;
+    width: 3rem;
+    height: 3rem;
+    text-align: center;
+    color: red;
+    font-weight: bolder;
+    background-color: white;
+    border: solid rgb(230,230,230) 1px;
+    border-radius: 100%;
+    padding-top: 0.3rem;
+    box-shadow: 0 0 0.8rem rgb(200,200,200);
+    z-index: 100;
+
+}
+
+.todo_item_container {
+    margin: 2rem auto;
+}
+
+.todo_item_section_heading {
+    font-size: 0.8rem;
+    font-weight: bolder;
+    position: relative;
+}
+
+/* The red hztal. line before the task section headings */
+.todo_item_section_heading:after {
+    position: absolute;
+    top: 0.55rem;
+    left: -0.6rem;
+    content: "";
+    width: 0.5rem;
+    height:0.2rem;
+    background-color: red;
+}
+
+.todo_item_section {
+    position: relative;
+    margin: 0 0 0 0rem;
+    padding: 0.7rem 0.5rem 0.5rem 1rem;
+    margin-top: 0rem;
+    text-align: left;
+    font-size: 1rem;
+}
+
+/* Hiding the ID value of the tasks*/
+.todo_item_id {
+    display: none;
+}
+
+.todo_item_name {
+    height: 4rem;
+    overflow-y: auto;
+}
+
+.todo_item_description {
+    height: 8rem;
+    overflow-y: auto;
+}
+
+/* The EDIT and DELETE buttons on the bottom right corner of the task card */
+footer.todo_item_actions_btns {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0.8rem 1rem 0;
+}
+
+footer i {
+    font-size: 1.5rem;
+    margin-left: 0.8rem;
+}
+
+i.fa-edit {
+    font-size: 1.45rem;
+}
+
+.task_action_btn:hover {
+    color: red;
+}
+
+/* The NEW TASK FORM*/
+#new_task_form_submit_btn, #new_task_form_cancel_btn, #new_task_form_clear_btn {
+    line-height: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+#form_submit_clear_cancel_btns {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.custom-checkbox {
+    position: relative;
+    top: 2.5rem;
+    left: 2rem;
+}
+
+
+/* Small devices (landscape phones, 576px and up) */
+@media (max-width: 576px) {
+
+    .new_task_form_btn button {
+       font-size: 1.5rem;
+    }
+
+    header.jumbotron h1{
+        font-size: 1.6rem;
+    }
+
+    header.jumbotron p{
+        font-size: 0.8rem;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    div.todo_item_container.card {
+        width: 80%;
+    }
+
+    #jumbotron_header button{
+        margin-top: 0.15rem;
+    }
+
+    header div.row {
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+
+    #jumbotron_header button{
+        margin: 0 auto;
+    }
+}
+
+
+
+
+
+

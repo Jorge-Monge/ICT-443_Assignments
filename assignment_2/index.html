@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Grocery List</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/fontawesome/css/all.css" type="text/css">
+    <link rel="stylesheet" href="styles/style.css" type="text/css">
+    <script src="scripts/main.js" defer></script>
+</head>
+
+<body>
+    <header id="jumbotron_header" class="jumbotron jumbotron-fluid border-bottom border-dark">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-6 col-12">
+                    <h1 class="col-12 text-center">Just another task manager</h1>
+                    <p class="col-12 lead text-center">Some Bootstrap, some JS (and a future PHP back-end)</p>
+                </div>
+
+                <div id="header_btns_container" class="row justify-content-between col-12 col-lg-6">
+                    <div class="row col-md-4 col-12">
+                        <button id="new_task_btn" type="button" class="btn btn-secondary col-12">New Task</button>
+                    </div>
+                    <div class="row col-md-4 col-12">
+                        <button id="hide_tasks_btn" type="button" class="btn btn-secondary col-12" disabled>Hide
+                            All</button>
+                    </div>
+                    <div class="row col-md-4 col-12">
+                        <button id="delete_tasks_btn" type="button" class="btn btn-secondary col-12" disabled>Delete All</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <div id="global_container_form" class="col-12 border-bottom border-dark d-none">
+        <div id="form_container" class="container ">
+            
+            <form id="new_task_form_id" name="new_task_form" action="" class="form-row">
+
+                <div class="form-group col-md-2">
+                    <label for="task_order_input_id">Order #</label>
+                    <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id" class="form-control" required>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="task_category_input_id">Category</label>
+                    <select name="task_category" id="task_category_input_id" class="form-control" required>
+                            <option value=""></option>
+                        <optgroup label="Personal">
+                            <option value="Groceries">Groceries</option>
+                            <option value="Working Out">Working Out</option>
+                            <option value="Family">Family</option>
+                            <option value="Home Maintenance">Home Maintenance</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Other">Other</option>
+                        </optgroup>
+                        <optgroup label="Work">
+                            <option value="Task">Task</option>
+                            <option value="Phone Call">Phone Call</option>
+                            <option value="Meeting">Meeting</option>
+                            <option value="Other">Other</option>
+                        </optgroup>
+                        <optgroup label="Other">
+                            <option value="Other">Other</option>
+                        </optgroup>
+                    </select>
+                </div><!--  Category Selection Ends -->
+
+                <div data-customHide = "true" data-tasktype="general" class="form-group col-md-3 col-sm-12">
+                    <label for="task_name_input_id">Name</label>
+                    <input type="text" name="task_name" id="task_name_input_id" class="form-control">
+                </div>
+
+                <!-- Accepted current values for data-tasktype are:
+                general, groceries, working_out, phone_call, meeting -->
+                <div data-customHide = "true" data-tasktype="groceries" class="form-group col-md-3 col-sm-12 d-none">
+                    <label for="grocery_item_name_input_id">Item Name</label>
+                    <input type="text" name="grocery_item_name" id="grocery_item_name_input_id" class="form-control">
+                </div>
+
+                <div data-customHide = "true" data-tasktype="groceries" class="form-group col-md-3 col-sm-12 d-none">
+                    <label for="grocery_quantity_input_id">Quantity</label>
+                    <input type="text" name="grocery_quantity" id="grocery_quantity_input_id" class="form-control">
+                </div>
+
+                <div data-customHide = "true" data-tasktype="working_out" class="form-group col-md-3 col-sm-12 d-none">
+                    <label for="activity_input_id">Activity</label>
+                    <input type="text" name="activity" id="activity_input_id" class="form-control">
+                </div>
+
+                <div data-customHide = "true" data-tasktype="working_out" class="form-group col-md-3 col-sm-12 d-none">
+                    <label for="kms_time_input_id">Kms/Time</label>
+                    <input type="text" name="kms_time" id="kms_time_input_id" class="form-control">
+                </div>
+
+                <div data-customHide = "true" data-tasktype="phone_call" class="form-group col-md-3 col-sm-12 d-none">
+                    <label for="person_name_input_id">Person Name</label>
+                    <input type="text" name="person_name" id="person_name_input_id" class="form-control">
+                </div>
+
+                <div data-customHide = "true" data-tasktype="phone_call" class="form-group col-md-3 col-sm-12 d-none">
+                    <label for="telephone_number_input_id">Telephone #</label>
+                    <input type="text" name="telephone_number" id="telephone_number_input_id" class="form-control">
+                </div>
+
+                <div data-customHide = "true" data-tasktype="meeting" class="form-group col-md-3 col-sm-12 d-none">
+                    <label for="attendees_input_id">Attendees</label>
+                    <input type="text" name="attendees" id="attendees_input_id" class="form-control">
+                </div>
+
+                <div class="form-group  col-md-3 col-6">
+                    <label for="task_due_date_input_id">Due Date</label>
+                    <input type="date" name="task_due_date" id="task_due_date_input_id" class="form-control" required>
+                </div>
+
+                <div class="col-md-1 col-6 custom-control custom-checkbox">
+                    <input type="checkbox" name="task_is_urgent" id="task_is_urgent_id" class="custom-control-input">
+                    <label for="task_is_urgent_id" class="custom-control-label">Urgent</label>
+                </div>
+
+                <div class="form-group col-12">
+                    <label for=" task_description_input_id">Description</label>
+                    <textarea name="task_description" id="task_description_input_id" class="form-control"></textarea>
+                </div>
+
+                <div id="form_submit_clear_cancel_btns" class="row col-12 align-items-center justify-content-between">
+                    <div class="new_task_form_btn col-sm-4">
+                        <button type="submit" id="new_task_form_submit_btn" class="btn btn-secondary btn-lg col-12">Submit</button>
+                    </div>
+                    <div class="new_task_form_btn col-sm-4">
+                        <button type="button" id="new_task_form_clear_btn" class="btn btn-secondary btn-lg col-12">Clear</button>
+                    </div>
+                    <div class="new_task_form_btn col-sm-4">
+                        <button type="button" id="new_task_form_cancel_btn" class="btn btn-secondary btn-lg col-12">Cancel</button>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Whole body of items -->
+    <div id="todo_item_list_container" class="container container-fluid">
+        <div class="row">
+
+            <div class="todo_item_card_prototype todo_item_supercontainer col-md-6 col-lg-4 d-none">
+                <div data-id="" data-order="" data-before-content="" class="todo_item_container card">
+                    <div class="todo_item_list">
+                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>NAME</div>
+                        <div class="todo_item_section todo_item_name"></div>
+                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>DESCRIPTION
+                        </div>
+                        <div class="todo_item_section todo_item_description"></div>
+                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>DUE DATE</div>
+                        <div class="todo_item_section todo_item_dueDate"></div>
+                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>URGENT</div>
+                        <div class="todo_item_section todo_item_isUrgent"></div>
+                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>CATEGORY</div>
+                        <div class="todo_item_section todo_item_category"></div>
+                    </div>
+                    <footer class="todo_item_actions_btns">
+                        <i id="edit_task_btn" class="task_action_btn fas fa-edit"></i>
+                        <i id="delete_task_btn" class="task_action_btn far fa-trash-alt"></i>
+                    </footer>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
