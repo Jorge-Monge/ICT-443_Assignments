@@ -32,7 +32,8 @@
                             All</button>
                     </div>
                     <div class="row col-md-4 col-12">
-                        <button id="delete_tasks_btn" type="button" class="btn btn-secondary col-12" disabled>Delete All</button>
+                        <button id="delete_tasks_btn" type="button" class="btn btn-secondary col-12" disabled>Delete
+                            All</button>
                     </div>
 
                 </div>
@@ -43,18 +44,19 @@
 
     <div id="global_container_form" class="col-12 border-bottom border-dark d-none">
         <div id="form_container" class="container ">
-            
+
             <form id="new_task_form_id" name="new_task_form" action="" class="form-row">
 
                 <div class="form-group col-md-2">
                     <label for="task_order_input_id">Order #</label>
-                    <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id" class="form-control" required>
+                    <input type="number" min=1 max=1000 name="task_order" id="task_order_input_id" class="form-control"
+                        required>
                 </div>
 
                 <div class="form-group col-md-3">
                     <label for="task_category_input_id">Category</label>
                     <select name="task_category" id="task_category_input_id" class="form-control" required>
-                            <option value=""></option>
+                        <option value=""></option>
                         <optgroup label="Personal">
                             <option value="Groceries">Groceries</option>
                             <option value="Working Out">Working Out</option>
@@ -75,44 +77,44 @@
                     </select>
                 </div><!--  Category Selection Ends -->
 
-                <div data-customHide = "true" data-tasktype="general" class="form-group col-md-3 col-sm-12">
+                <div data-customHide="true" data-tasktype="default" class="form-group col-md-3 col-sm-12 d-none">
                     <label for="task_name_input_id">Name</label>
                     <input type="text" name="task_name" id="task_name_input_id" class="form-control">
                 </div>
 
                 <!-- Accepted current values for data-tasktype are:
                 general, groceries, working_out, phone_call, meeting -->
-                <div data-customHide = "true" data-tasktype="groceries" class="form-group col-md-3 col-sm-12 d-none">
+                <div data-customHide="true" data-tasktype="groceries" class="form-group col-md-3 col-sm-12 d-none">
                     <label for="grocery_item_name_input_id">Item Name</label>
                     <input type="text" name="grocery_item_name" id="grocery_item_name_input_id" class="form-control">
                 </div>
 
-                <div data-customHide = "true" data-tasktype="groceries" class="form-group col-md-3 col-sm-12 d-none">
+                <div data-customHide="true" data-tasktype="groceries" class="form-group col-md-3 col-sm-12 d-none">
                     <label for="grocery_quantity_input_id">Quantity</label>
                     <input type="text" name="grocery_quantity" id="grocery_quantity_input_id" class="form-control">
                 </div>
 
-                <div data-customHide = "true" data-tasktype="working_out" class="form-group col-md-3 col-sm-12 d-none">
+                <div data-customHide="true" data-tasktype="working_out" class="form-group col-md-3 col-sm-12 d-none">
                     <label for="activity_input_id">Activity</label>
                     <input type="text" name="activity" id="activity_input_id" class="form-control">
                 </div>
 
-                <div data-customHide = "true" data-tasktype="working_out" class="form-group col-md-3 col-sm-12 d-none">
+                <div data-customHide="true" data-tasktype="working_out" class="form-group col-md-3 col-sm-12 d-none">
                     <label for="kms_time_input_id">Kms/Time</label>
-                    <input type="text" name="kms_time" id="kms_time_input_id" class="form-control">
+                    <input type="text" name="kms_time" id="distance_time_input_id" class="form-control">
                 </div>
 
-                <div data-customHide = "true" data-tasktype="phone_call" class="form-group col-md-3 col-sm-12 d-none">
+                <div data-customHide="true" data-tasktype="phone_call" class="form-group col-md-3 col-sm-12 d-none">
                     <label for="person_name_input_id">Person Name</label>
                     <input type="text" name="person_name" id="person_name_input_id" class="form-control">
                 </div>
 
-                <div data-customHide = "true" data-tasktype="phone_call" class="form-group col-md-3 col-sm-12 d-none">
+                <div data-customHide="true" data-tasktype="phone_call" class="form-group col-md-3 col-sm-12 d-none">
                     <label for="telephone_number_input_id">Telephone #</label>
                     <input type="text" name="telephone_number" id="telephone_number_input_id" class="form-control">
                 </div>
 
-                <div data-customHide = "true" data-tasktype="meeting" class="form-group col-md-3 col-sm-12 d-none">
+                <div data-customHide="true" data-tasktype="meeting" class="form-group col-md-3 col-sm-12 d-none">
                     <label for="attendees_input_id">Attendees</label>
                     <input type="text" name="attendees" id="attendees_input_id" class="form-control">
                 </div>
@@ -134,13 +136,16 @@
 
                 <div id="form_submit_clear_cancel_btns" class="row col-12 align-items-center justify-content-between">
                     <div class="new_task_form_btn col-sm-4">
-                        <button type="submit" id="new_task_form_submit_btn" class="btn btn-secondary btn-lg col-12">Submit</button>
+                        <button type="submit" id="new_task_form_submit_btn"
+                            class="btn btn-secondary btn-lg col-12">Submit</button>
                     </div>
                     <div class="new_task_form_btn col-sm-4">
-                        <button type="button" id="new_task_form_clear_btn" class="btn btn-secondary btn-lg col-12">Clear</button>
+                        <button type="button" id="new_task_form_clear_btn"
+                            class="btn btn-secondary btn-lg col-12">Clear</button>
                     </div>
                     <div class="new_task_form_btn col-sm-4">
-                        <button type="button" id="new_task_form_cancel_btn" class="btn btn-secondary btn-lg col-12">Cancel</button>
+                        <button type="button" id="new_task_form_cancel_btn"
+                            class="btn btn-secondary btn-lg col-12">Cancel</button>
                     </div>
                 </div>
 
@@ -153,25 +158,49 @@
     <div id="todo_item_list_container" class="container container-fluid">
         <div class="row">
 
+            <!-- 'prototype_html_card' variable in JS -->
             <div class="todo_item_card_prototype todo_item_supercontainer col-md-6 col-lg-4 d-none">
                 <div data-id="" data-order="" data-before-content="" class="todo_item_container card">
                     <div class="todo_item_list">
-                        <div class="todo_item_section_heading todo_item_name"><i class="fas fa-angle-double-right"></i>NAME</div>
-                        <div class="todo_item_section todo_item_name"></div>
-                        <div class="todo_item_section_heading todo_item_grocery_item_name"><i class="fas fa-angle-double-right"></i>GROCERY ITEM</div>
-                        <div class="todo_item_section todo_item_grocery_item_name"></div>
-                        <div class="todo_item_section_heading todo_item_grocery_quantity"><i class="fas fa-angle-double-right"></i>QUANTITY</div>
-                        <div class="todo_item_section todo_item_grocery_quantity"></div>
-                        <div class="todo_item_section_heading todo_item_workingout_activity"><i class="fas fa-angle-double-right"></i>ACTIVITY</div>
-                        <div class="todo_item_section todo_item_workingout_activity"></div>
-                        <div class="todo_item_section_heading todo_item_workingout_distance_time"><i class="fas fa-angle-double-right"></i>DISTANCE/TIME</div>
-                        <div class="todo_item_section todo_item_workingout_distance_time"></div>
-                        <div class="todo_item_section_heading todo_item_phonecall_personname"><i class="fas fa-angle-double-right"></i>PERSON NAME</div>
-                        <div class="todo_item_section todo_item_phonecall_personname"></div>
-                        <div class="todo_item_section_heading todo_item_phone_number"><i class="fas fa-angle-double-right"></i>PHONE NUMBER</div>
-                        <div class="todo_item_section todo_item_phone_number"></div>
-                        <div class="todo_item_section_heading todo_item_meeting_attendees"><i class="fas fa-angle-double-right"></i>ATTENDEES</div>
-                        <div class="todo_item_section todo_item_meeting_attendees"></div>
+
+                        <!-- TOGABBLE SECTION -->
+                        <div class="toggable_todo_item_section DefaultToDoItem d-none">
+                                <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>NAME</div>
+                                <div class="todo_item_section todo_item_name"></div>
+                        </div>
+                        <!-- TOGABBLE SECTION -->
+                        <div class="toggable_todo_item_section GroceryItem d-none">
+                            <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>GROCERY ITEM
+                            </div>
+                            <div class="todo_item_section todo_item_grocery_item_name"></div>
+                            <div class="todo_item_section_heading"><i
+                                    class="fas fa-angle-double-right"></i>QUANTITY</div>
+                            <div class="todo_item_section todo_item_grocery_quantity"></div>
+                        </div>
+                         <!-- TOGABBLE SECTION -->
+                        <div class="toggable_todo_item_section WorkingOut d-none">
+                            <div class="todo_item_section_heading"><i
+                                    class="fas fa-angle-double-right"></i>ACTIVITY</div>
+                            <div class="todo_item_section todo_item_workingout_activity"></div>
+                            <div class="todo_item_section_heading"><i
+                                    class="fas fa-angle-double-right"></i>DISTANCE/TIME</div>
+                            <div class="todo_item_section todo_item_workingout_distance_time"></div>
+                        </div>
+                        <!-- TOGABBLE SECTION -->
+                        <div class="toggable_todo_item_section PhoneCall d-none">
+                            <div class="todo_item_section_heading"><i
+                                    class="fas fa-angle-double-right"></i>PERSON NAME</div>
+                            <div class="todo_item_section todo_item_phonecall_personname"></div>
+                            <div class="todo_item_section_heading"><i
+                                    class="fas fa-angle-double-right"></i>PHONE NUMBER</div>
+                            <div class="todo_item_section todo_item_phone_number"></div>
+                        </div>
+                        <!-- TOGABBLE SECTION -->
+                        <div class="toggable_todo_item_section Meeting d-none">
+                            <div class="todo_item_section_heading"><i
+                                    class="fas fa-angle-double-right"></i>ATTENDEES</div>
+                            <div class="todo_item_section todo_item_meeting_attendees"></div>
+                        </div>
                         <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>DESCRIPTION
                         </div>
                         <div class="todo_item_section todo_item_description"></div>

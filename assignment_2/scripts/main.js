@@ -5,14 +5,17 @@
 // Date: June 2019
 //
 
-// TODO: When editing, populate correctly the form.
+// TODO: When editing a form, if the category is changed, the value 'undefined' is hardcoded.
 
-// TODO: When drawing the cards, after cloning, delete the sections not relevant.
+
 
 let itemsArray = [];
 let item = "";
 let taskCategoryGroup;
 let taskCategory;
+let taskCategorySelector = document.querySelector("#task_category_input_id");
+let showHideAllBtn = document.querySelector("#hide_tasks_btn");
+let taskBeingEdited = null;
 
 // OBJECT that models a to-do task (item)
 class ToDoItem {
@@ -119,6 +122,22 @@ document.addEventListener("click", (e) => {
         // Clear the form values
         clearFormValues(newTaskForm);
 
+        if (editTask) {
+            console.log(taskBeingEdited);
+            let changeEvent = new Event("change");
+            taskCategorySelector.value = taskBeingEdited.category;
+            taskCategorySelector.dispatchEvent(changeEvent);
+            
+            
+            taskCategorySelector.value = null;
+        } else {
+            console.log("I am not in an EDIT SESSION");
+            // Clears previous category selections, if NOT IN EDITING SESSION
+            let changeEvent = new Event("change");
+            taskCategorySelector.dispatchEvent(changeEvent);
+            taskCategorySelector.value = null;
+        }
+        
         // Pre-fills the order value with the next order number
         maxOrderValue = !editTask ? maxValue(toDoList.items, "order") : maxValue(toDoList.items, "order") - 1;
         populateOrderValue(maxOrderValue);
@@ -140,14 +159,17 @@ document.addEventListener("click", (e) => {
     }
     else if (e.target && e.target.id == "hide_tasks_btn") { // 'Hide All' button
 
-        if (e.target.classList.contains("action_hide")) {
-            e.target.innerHTML = "Show All";
-            hideElem(todo_item_list_container);
-        } else {
+        if (e.target.classList.contains("cards_hidden")) { // Cards are hidden when button clicked
             e.target.innerHTML = "Hide All";
-            showElem(todo_item_list_container)
+            e.target.classList.remove("cards_hidden");
+            showElem(todo_item_list_container);
+            
+        } else { // Cards are displayed when button clicked
+            e.target.innerHTML = "Show All";
+            e.target.classList.add("cards_hidden");
+            hideElem(todo_item_list_container);
         }
-        e.target.classList.toggle("action_hide");
+        
 
     }
     else if (e.target && e.target.id == "delete_tasks_btn") { // 'Delete All' button
@@ -162,10 +184,13 @@ document.addEventListener("click", (e) => {
 //
 // TASK CATEGORY DROPDOWN LISTENER
 //
-let taskCategorySelector = document.querySelector("#task_category_input_id");
+//taskCategorySelector = document.querySelector("#task_category_input_id");
 taskCategorySelector.addEventListener("change", function (event) {
     taskCategory = taskCategorySelector.value;
     taskCategoryGroup = categoryGroup("task_category_input_id");
+    console.log(newTaskFormContainer);
+    console.log(taskCategoryGroup);
+    console.log(taskCategory);
     modifyFormAccordingCategory(newTaskFormContainer, taskCategoryGroup, taskCategory);
 });
 
@@ -211,7 +236,7 @@ newTaskFormContainer.addEventListener("submit", function (event) {
     let taskGroceryItemName = document.querySelector("#grocery_item_name_input_id").value;
     let taskGroceryQty = document.querySelector("#grocery_quantity_input_id").value;
     let taskWorkingOutActivity = document.querySelector("#activity_input_id").value;
-    let taskActivityKmsTime = document.querySelector("#kms_time_input_id").value;
+    let taskActivityKmsTime = document.querySelector("#distance_time_input_id").value;
     let taskPhoneCallPerson = document.querySelector("#person_name_input_id").value;
     let taskPhoneCallNumber = document.querySelector("#telephone_number_input_id").value;
     let taskMeetingAttendees = document.querySelector("#attendees_input_id").value;
@@ -257,8 +282,8 @@ newTaskFormContainer.addEventListener("submit", function (event) {
     // a "slot" in the list of tasks for the new task, let's create
     // a new instance of the appropriate object   
     var toDoItem = getAppropriateTaskObjectInstance(formDataObject);
-    console.log("toDoItem returned from the Class constructor");
-    console.log(toDoItem);
+    //console.log("toDoItem returned from the Class constructor");
+    //console.log(toDoItem);
 
     // Add item to list of items
     toDoList.addItem(toDoItem);
@@ -276,6 +301,15 @@ newTaskFormContainer.addEventListener("submit", function (event) {
     // Enable 'Hide All' and 'Delete All' buttons
     enableDisableShowAllDeleteAllBtns(toDoList.items);
 
+    // If the tasks were hidden when the new task was submitted,
+    // then display them
+    if (showHideAllBtn.classList.contains("cards_hidden")) {
+        showHideAllBtn.classList.remove("cards_hidden");
+        showHideAllBtn.innerHTML = "Hide All";
+        showElem(todo_item_list_container);
+    }
+    
+
 });
 
 
@@ -292,6 +326,7 @@ document.addEventListener("click", (e) => {
     }
     else if (e.target && e.target.id == "new_task_form_cancel_btn") { // 'Cancel' form button
 
+        editTask = false;
         hideElemShowElem(newTaskFormContainer, jumbotronHeader);
 
     }
@@ -309,12 +344,27 @@ document.addEventListener("click", (e) => {
 
         // Get the ID of the task to edit/delete
         editTaskId = e.target.parentNode.parentNode.getAttribute("data-id");
-        editTask = true;
         editedTaskDelete = e.target;
+        // Storing the task object corresponding to the card being edited,
+        // so that we can re-draw the form correctly
+        /*var editedTaskCategory = 
+            document.querySelector(`[data-id='${editTaskId}'] div.todo_item_category`).innerHTML;*/
+        for (let elem of toDoList.items) {
+            if (elem.id == editTaskId) {
+                taskBeingEdited = elem;
+            }
+        }
         scrollToTop();
         // Show the form
+        editTask = true; // Pass this information to the New Task operation
         newTaskButton.click();
         // Fill the form with the task data
+        /*
+        console.log("Editing a task...");
+        console.log("toDoList.items:");
+        console.log(toDoList.items);
+        console.log("editTaskId", editTaskId);
+        */
         fillFormTaskData(toDoList.items, editTaskId);
 
     }
@@ -387,9 +437,13 @@ function modifyFormAccordingCategory(newTaskFormContainer, taskCategoryGroup, ta
             hideFormElems("[data-customHide='true']");
             showFormElems("[data-tasktype='meeting']");
             break;
+        case "DefaultToDoItem":
+                hideFormElems("[data-customHide='true']");
+                showFormElems("[data-tasktype='default']");
+                break;
         default:
             hideFormElems("[data-customHide='true']");
-            showFormElems("[data-tasktype='general']");
+            showFormElems("[data-tasktype='default']");
     }
 }
 
@@ -412,7 +466,7 @@ function getAppropriateTaskObjectInstance(formDataObject) {
             return groceryItem;
 
         case "Personal-Working Out":
-                console.log("CASE WORKING OUT");
+            console.log("CASE WORKING OUT");
             var workingOut = new WorkingOut(
                 formDataObject.taskId, // sequential, internal ID
                 formDataObject.taskOrder,
@@ -604,7 +658,7 @@ function enableDisableShowAllDeleteAllBtns(toDoListItems) {
 function redrawTaskCards(toDoList) {
 
     // Here the grocery item is correct.
-    console.log(toDoList);
+    //console.log(toDoList);
 
     let newItemHtml;
     toDoList.items.forEach((taskObject) => {
@@ -618,14 +672,23 @@ function redrawTaskCards(toDoList) {
 function createNewItemHtml(prototype_html_card, toDoItem) {
 
     // Here the grocery item is correct.
-    console.log("Creating HTML Element");
-    console.log(toDoItem);
-    console.log("PROTOTYPE OF THE ELEMENT BEING DRAWN");
-    console.log(toDoItem.constructor.name);
+    //console.log("Creating HTML Element");
+    //console.log(toDoItem);
+    //console.log("PROTOTYPE OF THE ELEMENT BEING DRAWN");
+    //console.log(toDoItem.constructor.name);
     let toDoItemPrototype = toDoItem.constructor.name;
+
+
 
     // The prototype card is CLONED
     let newHtmlCard = prototype_html_card.cloneNode(true);
+    let toggableSections = newHtmlCard.querySelectorAll(".toggable_todo_item_section");
+    for (let toggableSectionContainer of toggableSections) {
+        if (toggableSectionContainer.classList.contains(toDoItemPrototype)) {
+            toggableSectionContainer.classList.remove("d-none");
+        }
+    }
+
     // Task ID, task Order
     let a = newHtmlCard.querySelector(".todo_item_card_prototype>div");
     a.setAttribute("data-id", toDoItem.id);
@@ -635,12 +698,8 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     let b = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_category");
     b.appendChild(document.createTextNode(`${toDoItem.categoryGroup} | ${toDoItem.category}`));
 
-    function removeNotRelevanFromCard(toDoItemPrototype) {
 
-    }
-    
     if (toDoItemPrototype === "GroceryItem") {
-        removeNotRelevanFromCard(toDoItemPrototype);
         // Grocery item name
         let d = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_grocery_item_name");
         d.appendChild(document.createTextNode(toDoItem.grocery_item_name));
@@ -648,7 +707,7 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
         let e = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_grocery_quantity");
         e.appendChild(document.createTextNode(toDoItem.grocery_quantity));
     }
-    
+
     else if (toDoItemPrototype === "WorkingOut") {
         // WorkingOut Activity
         let f = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_workingout_activity");
@@ -657,7 +716,7 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
         let g = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_workingout_distance_time");
         g.appendChild(document.createTextNode(toDoItem.distance_time));
     }
-    
+
     else if (toDoItemPrototype === "PhoneCall") {
         // PhoneCall Person
         let h = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_phonecall_personname");
@@ -678,7 +737,7 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
         let c = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_name");
         c.appendChild(document.createTextNode(toDoItem.name));
     }
-    
+
     // Due date
     let m = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_dueDate");
     let year = toDoItem.dueDate.getFullYear();
@@ -743,9 +802,17 @@ function fillFormTaskData(toDoListItems, taskId) {
     for (elem of toDoListItems) {
 
         if (elem.id == taskId) {
+            console.log("taskId", taskId);
             document.querySelector("#task_order_input_id").value = elem.order;
             document.querySelector("#task_category_input_id").value = elem.category;
             document.querySelector("#task_name_input_id").value = elem.name;
+            document.querySelector("#grocery_item_name_input_id").value = elem.grocery_item_name;
+            document.querySelector("#grocery_quantity_input_id").value = elem.grocery_quantity;
+            document.querySelector("#activity_input_id").value = elem.activity;
+            document.querySelector("#distance_time_input_id").value = elem.distance_time;
+            document.querySelector("#person_name_input_id").value = elem.person;
+            document.querySelector("#telephone_number_input_id").value = elem.number;
+            document.querySelector("#attendees_input_id").value = elem.attendees;
             document.querySelector("#task_due_date_input_id").valueAsDate = new Date(Date.parse(elem.dueDate));
             document.querySelector("#task_is_urgent_id").checked = elem.isUrgent;
             document.querySelector("#task_description_input_id").value = elem.description;
