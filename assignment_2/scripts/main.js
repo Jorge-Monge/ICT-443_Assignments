@@ -5,6 +5,9 @@
 // Date: June 2019
 //
 
+// TODO: When editing, populate correctly the form.
+
+// TODO: When drawing the cards, after cloning, delete the sections not relevant.
 
 let itemsArray = [];
 let item = "";
@@ -13,7 +16,7 @@ let taskCategory;
 
 // OBJECT that models a to-do task (item)
 class ToDoItem {
-    constructor(id, order, categoryGroup, category, name, dueDate, isUrgent, description) {
+    constructor(id, order, categoryGroup, category, dueDate, isUrgent, description) {
         this.id = id;
         this.order = order;
         this.categoryGroup = categoryGroup
@@ -24,13 +27,47 @@ class ToDoItem {
     }
 }
 
-class groceryItem extends ToDoItem {
+class DefaultToDoItem extends ToDoItem {
+    constructor(id, order, categoryGroup, category, dueDate,
+        isUrgent, description, name) {
+        super(id, order, categoryGroup, category, dueDate, isUrgent, description);
+        this.name = name;
+    }
+}
+
+class GroceryItem extends ToDoItem {
     constructor(id, order, categoryGroup, category, dueDate,
         isUrgent, description, grocery_item_name, grocery_quantity) {
         super(id, order, categoryGroup, category, dueDate, isUrgent, description);
         this.grocery_item_name = grocery_item_name;
         this.grocery_quantity = grocery_quantity;
-    } 
+    }
+}
+
+class WorkingOut extends ToDoItem {
+    constructor(id, order, categoryGroup, category, dueDate,
+        isUrgent, description, activity, distance_time) {
+        super(id, order, categoryGroup, category, dueDate, isUrgent, description);
+        this.activity = activity;
+        this.distance_time = distance_time;
+    }
+}
+
+class PhoneCall extends ToDoItem {
+    constructor(id, order, categoryGroup, category, dueDate,
+        isUrgent, description, person, number) {
+        super(id, order, categoryGroup, category, dueDate, isUrgent, description);
+        this.person = person;
+        this.number = number;
+    }
+}
+
+class Meeting extends ToDoItem {
+    constructor(id, order, categoryGroup, category, dueDate,
+        isUrgent, description, attendees) {
+        super(id, order, categoryGroup, category, dueDate, isUrgent, description);
+        this.attendees = attendees;
+    }
 }
 
 /* OBJECT that models a to-do task list
@@ -83,7 +120,7 @@ document.addEventListener("click", (e) => {
         clearFormValues(newTaskForm);
 
         // Pre-fills the order value with the next order number
-        maxOrderValue = !editTask ? maxValue(toDoList.items, "order"): maxValue(toDoList.items, "order") - 1;
+        maxOrderValue = !editTask ? maxValue(toDoList.items, "order") : maxValue(toDoList.items, "order") - 1;
         populateOrderValue(maxOrderValue);
 
         // Modify input validation to allow ONLY
@@ -126,13 +163,11 @@ document.addEventListener("click", (e) => {
 // TASK CATEGORY DROPDOWN LISTENER
 //
 let taskCategorySelector = document.querySelector("#task_category_input_id");
-taskCategorySelector.addEventListener("change", function(event) {
+taskCategorySelector.addEventListener("change", function (event) {
     taskCategory = taskCategorySelector.value;
     taskCategoryGroup = categoryGroup("task_category_input_id");
     modifyFormAccordingCategory(newTaskFormContainer, taskCategoryGroup, taskCategory);
 });
-
-
 
 
 //
@@ -221,18 +256,9 @@ newTaskFormContainer.addEventListener("submit", function (event) {
     // Now that we have created (if the same taskOrder existed already)
     // a "slot" in the list of tasks for the new task, let's create
     // a new instance of the appropriate object   
-    getAppropriateTaskObjectInstance(formDataObject);
-
-    var toDoItem = new ToDoItem(
-        !editTask ? maxValue(toDoList.items, "id") + 1 : editTaskId, // sequential, internal ID
-        taskOrder,
-        taskCategoryGroup,
-        taskCategory,
-        taskName,
-        taskDueDateWithTimeZone,
-        taskIsUrgent,
-        taskDescription
-    );
+    var toDoItem = getAppropriateTaskObjectInstance(formDataObject);
+    console.log("toDoItem returned from the Class constructor");
+    console.log(toDoItem);
 
     // Add item to list of items
     toDoList.addItem(toDoItem);
@@ -257,13 +283,13 @@ newTaskFormContainer.addEventListener("submit", function (event) {
 // CLEAR NEW-TASK FORM // CANCEL FORM SUBMISSION
 //
 document.addEventListener("click", (e) => {
-    
+
     if (e.target && e.target.id == "new_task_form_clear_btn") { // 'Clear' form button
         clearFormValues(newTaskForm);
         // Pre-fills the order value with the next logical number
         maxOrderValue = maxValue(toDoList.items, "order");
         populateOrderValue(maxOrderValue);
-    } 
+    }
     else if (e.target && e.target.id == "new_task_form_cancel_btn") { // 'Cancel' form button
 
         hideElemShowElem(newTaskFormContainer, jumbotronHeader);
@@ -295,7 +321,7 @@ document.addEventListener("click", (e) => {
     else if (e.target && e.target.id == "delete_task_btn") { // DELETE task
 
         var taskId = e.target.parentNode.parentNode.getAttribute("data-id");
-        
+
         // Update the list of tasks
         toDoList.items = itemsWithoutDeletedTask(toDoList.items, taskId);
         // Check if lists of tasks if empty => Disable some buttons
@@ -343,13 +369,13 @@ function showElem(elem2Show) {
 }
 
 function modifyFormAccordingCategory(newTaskFormContainer, taskCategoryGroup, taskCategory) {
-    
-    switch(`${taskCategoryGroup}-${taskCategory}`) {
+
+    switch (`${taskCategoryGroup}-${taskCategory}`) {
         case "Personal-Groceries":
             hideFormElems("[data-customHide='true']");
-            showFormElems("[data-tasktype='groceries']");      
+            showFormElems("[data-tasktype='groceries']");
             break;
-        case "Personal-Working Out": 
+        case "Personal-Working Out":
             hideFormElems("[data-customHide='true']");
             showFormElems("[data-tasktype='working_out']");
             break;
@@ -369,26 +395,85 @@ function modifyFormAccordingCategory(newTaskFormContainer, taskCategoryGroup, ta
 
 function getAppropriateTaskObjectInstance(formDataObject) {
 
-    switch(`${formDataObject.taskCategoryGroup}-${formDataObject.taskCategory}`) {
+    switch (`${formDataObject.taskCategoryGroup}-${formDataObject.taskCategory}`) {
         case "Personal-Groceries":
-            console.log("Hey, groceries");
-            break;
-        case "Personal-Working Out": 
-            
-            break;
+
+            var groceryItem = new GroceryItem(
+                formDataObject.taskId, // sequential, internal ID
+                formDataObject.taskOrder,
+                formDataObject.taskCategoryGroup,
+                formDataObject.taskCategory,
+                formDataObject.taskDueDateWithTimeZone,
+                formDataObject.taskIsUrgent,
+                formDataObject.taskDescription,
+                formDataObject.taskGroceryItemName,
+                formDataObject.taskGroceryQty
+            );
+            return groceryItem;
+
+        case "Personal-Working Out":
+                console.log("CASE WORKING OUT");
+            var workingOut = new WorkingOut(
+                formDataObject.taskId, // sequential, internal ID
+                formDataObject.taskOrder,
+                formDataObject.taskCategoryGroup,
+                formDataObject.taskCategory,
+                formDataObject.taskDueDateWithTimeZone,
+                formDataObject.taskIsUrgent,
+                formDataObject.taskDescription,
+                formDataObject.taskWorkingOutActivity,
+                formDataObject.taskActivityKmsTime
+            );
+            return workingOut;
+
         case "Work-Phone Call":
-            
-            break
+
+            var phoneCall = new PhoneCall(
+                formDataObject.taskId, // sequential, internal ID
+                formDataObject.taskOrder,
+                formDataObject.taskCategoryGroup,
+                formDataObject.taskCategory,
+                formDataObject.taskDueDateWithTimeZone,
+                formDataObject.taskIsUrgent,
+                formDataObject.taskDescription,
+                formDataObject.taskPhoneCallPerson,
+                formDataObject.taskPhoneCallNumber
+            );
+            return phoneCall;
+
         case "Work-Meeting":
-            
-            break;
+
+            var meeting = new Meeting(
+                formDataObject.taskId, // sequential, internal ID
+                formDataObject.taskOrder,
+                formDataObject.taskCategoryGroup,
+                formDataObject.taskCategory,
+                formDataObject.taskDueDateWithTimeZone,
+                formDataObject.taskIsUrgent,
+                formDataObject.taskDescription,
+                formDataObject.taskMeetingAttendees
+            );
+            return meeting;
+
         default:
-            
+
+            var defaultToDoItem = new DefaultToDoItem(
+                formDataObject.taskId, // sequential, internal ID
+                formDataObject.taskOrder,
+                formDataObject.taskCategoryGroup,
+                formDataObject.taskCategory,
+                formDataObject.taskDueDateWithTimeZone,
+                formDataObject.taskIsUrgent,
+                formDataObject.taskDescription,
+                formDataObject.taskName
+            );
+            return defaultToDoItem;
+
     }
 }
 
 function showFormElems(querySelector) {
-    
+
     let y = document.querySelectorAll(querySelector);
     for (let elem of y) {
         elem.classList.remove("d-none");
@@ -517,6 +602,10 @@ function enableDisableShowAllDeleteAllBtns(toDoListItems) {
 }
 
 function redrawTaskCards(toDoList) {
+
+    // Here the grocery item is correct.
+    console.log(toDoList);
+
     let newItemHtml;
     toDoList.items.forEach((taskObject) => {
         newItemHtml = createNewItemHtml(prototype_html_card, taskObject);
@@ -528,6 +617,14 @@ function redrawTaskCards(toDoList) {
 
 function createNewItemHtml(prototype_html_card, toDoItem) {
 
+    // Here the grocery item is correct.
+    console.log("Creating HTML Element");
+    console.log(toDoItem);
+    console.log("PROTOTYPE OF THE ELEMENT BEING DRAWN");
+    console.log(toDoItem.constructor.name);
+    let toDoItemPrototype = toDoItem.constructor.name;
+
+    // The prototype card is CLONED
     let newHtmlCard = prototype_html_card.cloneNode(true);
     // Task ID, task Order
     let a = newHtmlCard.querySelector(".todo_item_card_prototype>div");
@@ -537,25 +634,67 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     // Task category
     let b = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_category");
     b.appendChild(document.createTextNode(`${toDoItem.categoryGroup} | ${toDoItem.category}`));
-    // Task name
-    let c = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_name");
-    c.appendChild(document.createTextNode(toDoItem.name));
+
+    function removeNotRelevanFromCard(toDoItemPrototype) {
+
+    }
+    
+    if (toDoItemPrototype === "GroceryItem") {
+        removeNotRelevanFromCard(toDoItemPrototype);
+        // Grocery item name
+        let d = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_grocery_item_name");
+        d.appendChild(document.createTextNode(toDoItem.grocery_item_name));
+        // Grocery quantity
+        let e = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_grocery_quantity");
+        e.appendChild(document.createTextNode(toDoItem.grocery_quantity));
+    }
+    
+    else if (toDoItemPrototype === "WorkingOut") {
+        // WorkingOut Activity
+        let f = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_workingout_activity");
+        f.appendChild(document.createTextNode(toDoItem.activity));
+        // WorkingOut Distance-Time
+        let g = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_workingout_distance_time");
+        g.appendChild(document.createTextNode(toDoItem.distance_time));
+    }
+    
+    else if (toDoItemPrototype === "PhoneCall") {
+        // PhoneCall Person
+        let h = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_phonecall_personname");
+        h.appendChild(document.createTextNode(toDoItem.person));
+        // PhoneCall Number
+        let j = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_phone_number");
+        j.appendChild(document.createTextNode(toDoItem.number));
+    }
+
+    else if (toDoItemPrototype === "Meeting") {
+        // Meeting
+        let k = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_meeting_attendees");
+        k.appendChild(document.createTextNode(toDoItem.attendees));
+    }
+
+    else if (toDoItemPrototype === "DefaultToDoItem") {
+        // Task name
+        let c = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_name");
+        c.appendChild(document.createTextNode(toDoItem.name));
+    }
+    
     // Due date
-    let d = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_dueDate");
+    let m = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_dueDate");
     let year = toDoItem.dueDate.getFullYear();
     let month = (toDoItem.dueDate.getMonth() + 1).toString().padStart(2, "0");
     let day = toDoItem.dueDate.getDate();
-    d.appendChild(document.createTextNode(`${year}-${month}-${day}`));
+    m.appendChild(document.createTextNode(`${year}-${month}-${day}`));
     // Urgent
     let urgentCheckBox = toDoItem.isUrgent ?
         '<i class="far fa-check-square"></i>' :
         '<i class="far fa-square"></i>';
-    let e = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_isUrgent");
+    let n = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_isUrgent");
     //e.appendChild(document.createTextNode(toDoItem.isUrgent));
-    e.innerHTML = urgentCheckBox;
+    n.innerHTML = urgentCheckBox;
     // Description
-    let f = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_description");
-    f.appendChild(document.createTextNode(toDoItem.description));
+    let p = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_description");
+    p.appendChild(document.createTextNode(toDoItem.description));
     // Add class if task is urgent
     if (toDoItem.isUrgent) {
         a.classList.add("urgent");
@@ -564,7 +703,7 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     return newHtmlCard;
 }
 
-function addRemoveUrgentClass()  {
+function addRemoveUrgentClass() {
     let itemCard = document.querySelector("div.todo_item_container");
 
 }
@@ -602,7 +741,7 @@ function deleteAllTaskHtmlElems() {
 function fillFormTaskData(toDoListItems, taskId) {
 
     for (elem of toDoListItems) {
-        
+
         if (elem.id == taskId) {
             document.querySelector("#task_order_input_id").value = elem.order;
             document.querySelector("#task_category_input_id").value = elem.category;
@@ -616,5 +755,5 @@ function fillFormTaskData(toDoListItems, taskId) {
 }
 
 function scrollToTop() {
-    scroll(0,0);
+    scroll(0, 0);
 }
