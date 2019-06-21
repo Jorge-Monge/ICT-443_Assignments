@@ -61,10 +61,68 @@ header.jumbotron p{
 }
 
 div.todo_item_container.card {
-    background-color: rgba(0,109,204,0.1);
+    position: relative;
+    background-color: rgba(21, 143, 52, 0.1);
     padding: 0.5rem;
-    border-left: solid 3px red;
+    border-left: solid 3px rgb(28, 30, 161);
     box-shadow: 0 0 1rem rgb(230,230,230);
+}
+
+div.todo_item_container.card.urgent {
+    border-left: solid 3px red;
+}
+
+
+div.todo_item_container.card.WorkingOut:after {
+    z-index: -1000;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/images/workingout.jpg");
+    background-size: cover;
+    opacity: 0.2;
+}
+
+div.todo_item_container.card.GroceryItem:after {
+    z-index: -1000;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/images/groceryitem.jpg");
+    background-size: cover;
+    opacity: 0.2;
+}
+
+div.todo_item_container.card.PhoneCall:after {
+    z-index: -1000;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/images/phonecall.jpg");
+    background-size: cover;
+    opacity: 0.2;
+}
+
+div.todo_item_container.card.Meeting:after {
+    z-index: -1000;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../assets/images/meeting.jpg");
+    background-size: cover;
+    opacity: 0.2;
 }
 
 div.todo_item_container.card.urgent {
@@ -72,6 +130,7 @@ div.todo_item_container.card.urgent {
 }
 
 /* The order number on the top right corner of the task card */
+
 div.todo_item_container.card:before {
     position: absolute;
     top: -1.0rem;
@@ -110,6 +169,10 @@ div.todo_item_container.card:before {
     content: "";
     width: 0.5rem;
     height:0.2rem;
+    background-color: rgb(28, 30, 161);
+}
+
+.todo_item_section_heading.urgent_heading:after {
     background-color: red;
 }
 
@@ -214,6 +277,7 @@ i.fa-edit {
         margin: 0 auto;
     }
 }
+
 
 
 

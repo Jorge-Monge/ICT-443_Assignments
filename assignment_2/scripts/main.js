@@ -6,6 +6,16 @@
 //
 
 // TODO: When editing a form, if the category is changed, the value 'undefined' is hardcoded.
+/*
+Working out
+Photo by Victor Freitas on Unsplash
+Groceries
+Photo by Chantal Garnier on Unsplash
+Phone
+Photo by Björn Antonissen on Unsplash
+Meeting
+Photo by Campaign Creators on Unsplash
+*/
 
 
 
@@ -675,13 +685,14 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     //console.log("Creating HTML Element");
     //console.log(toDoItem);
     //console.log("PROTOTYPE OF THE ELEMENT BEING DRAWN");
-    //console.log(toDoItem.constructor.name);
+    console.log(toDoItem.constructor.name);
     let toDoItemPrototype = toDoItem.constructor.name;
 
 
 
     // The prototype card is CLONED
     let newHtmlCard = prototype_html_card.cloneNode(true);
+
     let toggableSections = newHtmlCard.querySelectorAll(".toggable_todo_item_section");
     for (let toggableSectionContainer of toggableSections) {
         if (toggableSectionContainer.classList.contains(toDoItemPrototype)) {
@@ -694,6 +705,16 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     a.setAttribute("data-id", toDoItem.id);
     a.setAttribute("data-order", toDoItem.order);
     a.setAttribute("data-before-content", toDoItem.order);
+    
+    // Add a class referencing the Category, so that the background of the 
+    // task card can be chosen appropriately
+    a.classList.add(toDoItemPrototype);
+    if (toDoItem.isUrgent) {
+        for (let elem of a.querySelectorAll(".todo_item_section_heading")) {
+            elem.classList.add("urgent_heading");
+        };
+    }
+    
     // Task category
     let b = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_category");
     b.appendChild(document.createTextNode(`${toDoItem.categoryGroup} | ${toDoItem.category}`));
