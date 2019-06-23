@@ -237,6 +237,25 @@ i.fa-edit {
     left: 2rem;
 }
 
+/* DRAG AND DROP STYLES */
+.hold {
+    border: solid red 4px;
+    
+}
+
+.drag-start {
+    outline: 5px dashed red;
+    outline-offset: -1rem;
+}
+
+.drag-enter {
+    outline: 5px dashed blue;
+    outline-offset: -1rem;
+}
+
+.todo_item_container.hovered {
+    border: 5px dashed red;
+}
 
 /* Small devices (landscape phones, 576px and up) */
 @media (max-width: 576px) {

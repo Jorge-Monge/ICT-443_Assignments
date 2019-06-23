@@ -25,6 +25,12 @@ let taskCategoryGroup;
 let taskCategory;
 let taskCategorySelector = document.querySelector("#task_category_input_id");
 let showHideAllBtn = document.querySelector("#hide_tasks_btn");
+//let itemCards = document.querySelectorAll("div.todo_item_container");
+let draggedCardObject;
+//let draggedOrderValue;
+//let draggedCardId;
+
+
 let taskBeingEdited = null;
 
 // OBJECT that models a to-do task (item)
@@ -137,17 +143,17 @@ document.addEventListener("click", (e) => {
             let changeEvent = new Event("change");
             taskCategorySelector.value = taskBeingEdited.category;
             taskCategorySelector.dispatchEvent(changeEvent);
-            
-            
+
+
             taskCategorySelector.value = null;
         } else {
-            console.log("I am not in an EDIT SESSION");
+            //console.log("I am not in an EDIT SESSION");
             // Clears previous category selections, if NOT IN EDITING SESSION
             let changeEvent = new Event("change");
             taskCategorySelector.dispatchEvent(changeEvent);
             taskCategorySelector.value = null;
         }
-        
+
         // Pre-fills the order value with the next order number
         maxOrderValue = !editTask ? maxValue(toDoList.items, "order") : maxValue(toDoList.items, "order") - 1;
         populateOrderValue(maxOrderValue);
@@ -173,13 +179,13 @@ document.addEventListener("click", (e) => {
             e.target.innerHTML = "Hide All";
             e.target.classList.remove("cards_hidden");
             showElem(todo_item_list_container);
-            
+
         } else { // Cards are displayed when button clicked
             e.target.innerHTML = "Show All";
             e.target.classList.add("cards_hidden");
             hideElem(todo_item_list_container);
         }
-        
+
 
     }
     else if (e.target && e.target.id == "delete_tasks_btn") { // 'Delete All' button
@@ -198,9 +204,9 @@ document.addEventListener("click", (e) => {
 taskCategorySelector.addEventListener("change", function (event) {
     taskCategory = taskCategorySelector.value;
     taskCategoryGroup = categoryGroup("task_category_input_id");
-    console.log(newTaskFormContainer);
-    console.log(taskCategoryGroup);
-    console.log(taskCategory);
+    //console.log(newTaskFormContainer);
+    //console.log(taskCategoryGroup);
+    //console.log(taskCategory);
     modifyFormAccordingCategory(newTaskFormContainer, taskCategoryGroup, taskCategory);
 });
 
@@ -220,7 +226,7 @@ newTaskFormContainer.addEventListener("submit", function (event) {
 
         // The edited data has been submitted. We can delete the old task
         // Update the list of tasks
-        console.log("taskId:", editTaskId);
+        //console.log("taskId:", editTaskId);
         toDoList.items = itemsWithoutDeletedTask(toDoList.items, editTaskId);
         // Since we have deleted a task, we need to update the order values
         // of the tasks after the one deleted.
@@ -318,7 +324,7 @@ newTaskFormContainer.addEventListener("submit", function (event) {
         showHideAllBtn.innerHTML = "Hide All";
         showElem(todo_item_list_container);
     }
-    
+
 
 });
 
@@ -448,9 +454,9 @@ function modifyFormAccordingCategory(newTaskFormContainer, taskCategoryGroup, ta
             showFormElems("[data-tasktype='meeting']");
             break;
         case "DefaultToDoItem":
-                hideFormElems("[data-customHide='true']");
-                showFormElems("[data-tasktype='default']");
-                break;
+            hideFormElems("[data-customHide='true']");
+            showFormElems("[data-tasktype='default']");
+            break;
         default:
             hideFormElems("[data-customHide='true']");
             showFormElems("[data-tasktype='default']");
@@ -476,7 +482,7 @@ function getAppropriateTaskObjectInstance(formDataObject) {
             return groceryItem;
 
         case "Personal-Working Out":
-            console.log("CASE WORKING OUT");
+            //console.log("CASE WORKING OUT");
             var workingOut = new WorkingOut(
                 formDataObject.taskId, // sequential, internal ID
                 formDataObject.taskOrder,
@@ -679,19 +685,119 @@ function redrawTaskCards(toDoList) {
     });
 }
 
+function dragStart(e) {
+    //console.log(this.parentElement);
+    //this.parentElement.classList.add("hold");
+    this.parentElement.classList.add("drag-start")
+    setTimeout(() => (this.classList.add("d-none")), 0);
+    //setTimeout(() => (this.parentElement.classList.add("drag-start")), 0);
+    //draggedOrderValue = e.target.dataset.order;
+    //draggedCardId = e.target.id;
+    draggedCardHtml = e.target;
+
+}
+
+function dragOver(e) {
+    e.preventDefault();
+    //console.log("drag over");
+    // Set the dropEffect to move
+    e.dataTransfer.dropEffect = "move";
+    //e.target.classList.add("drag-enter");
+    
+
+}
+
+function dragEnter(e) {
+    e.preventDefault();
+    console.log("drag enter");
+    console.log(this.querySelector("div"));
+    console.log(e.target);
+    //this.classList.add("hovered");
+    //e.target.classList.add("drag-enter")
+}
+
+function dragLeave() {
+    //this.classList.remove("hovered");
+    //console.log("Drag Leave");
+
+}
+
+function dragEnd(e) {
+    //console.log("Drag End");
+    //console.log(e.target);
+    this.parentElement.classList.remove("hold");
+    this.parentElement.classList.remove("d-none");
+}
+
+function dragDrop() {
+
+    let receivOrderValue = this.querySelectorAll("div")[0].dataset.order;
+
+    // Temporarily storing the dragging object
+    let draggedCardObject = toDoList.items.filter((arrayObject) => arrayObject.id === parseInt(draggedCardHtml.dataset.id));
+
+    // Temporarily removing the dragging object from the list of tasks
+    toDoList.items = itemsWithoutDeletedTask(toDoList.items, draggedCardHtml.dataset.id);
+    
+    // Fill the void left by the dragged card.
+    decreaseOrderValue(toDoList, draggedCardHtml.dataset.order);
+    // Create the void needed to accomodate the dragged card 
+    increaseOrderValue(toDoList, receivOrderValue);
+
+    // Add the dragged element back to the list of tasks.
+    draggedCardObject[0].order = parseInt(receivOrderValue);
+    toDoList.items.push(draggedCardObject[0]);
+
+    // Order tasks in toDoList.items (an array of objects)
+    // according to the task order values
+    toDoList.items.sort((a, b) => { return a.order - b.order });
+    
+    // Re-draw the task cards
+    deleteAllTaskHtmlElems();
+    redrawTaskCards(toDoList)
+
+}
+
+function addDragEventsReceivingCard(domElem) {
+
+    // Both 'dragover' and 'drop' event listeners are needed.
+    domElem.addEventListener("dragover", dragOver);
+    domElem.addEventListener("drop", dragDrop);
+
+    
+    domElem.addEventListener("dragenter", dragEnter);
+    /*
+    domElem.addEventListener("dragleave", dragLeave);
+    */
+
+
+}
+
+function addDragEventsDraggingCard(domElem) {
+
+    domElem.addEventListener("dragstart", dragStart);
+    domElem.addEventListener("dragend", dragEnd);
+}
+
 function createNewItemHtml(prototype_html_card, toDoItem) {
 
     // Here the grocery item is correct.
     //console.log("Creating HTML Element");
     //console.log(toDoItem);
     //console.log("PROTOTYPE OF THE ELEMENT BEING DRAWN");
-    console.log(toDoItem.constructor.name);
+    //console.log(toDoItem.constructor.name);
     let toDoItemPrototype = toDoItem.constructor.name;
 
-
-
     // The prototype card is CLONED
+    // 'newHtmlCard' will be the receiving card.
     let newHtmlCard = prototype_html_card.cloneNode(true);
+    // First child of the prototype card is the DOM element that
+    // we want to make draggable.
+    let newHtmlCardFill = newHtmlCard.querySelectorAll("div")[0];
+
+    // Add DRAG EVENTS
+    addDragEventsReceivingCard(newHtmlCard);
+    addDragEventsDraggingCard(newHtmlCardFill);
 
     let toggableSections = newHtmlCard.querySelectorAll(".toggable_todo_item_section");
     for (let toggableSectionContainer of toggableSections) {
@@ -705,7 +811,7 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     a.setAttribute("data-id", toDoItem.id);
     a.setAttribute("data-order", toDoItem.order);
     a.setAttribute("data-before-content", toDoItem.order);
-    
+
     // Add a class referencing the Category, so that the background of the 
     // task card can be chosen appropriately
     a.classList.add(toDoItemPrototype);
@@ -714,7 +820,7 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
             elem.classList.add("urgent_heading");
         };
     }
-    
+
     // Task category
     let b = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_category");
     b.appendChild(document.createTextNode(`${toDoItem.categoryGroup} | ${toDoItem.category}`));
@@ -783,10 +889,6 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     return newHtmlCard;
 }
 
-function addRemoveUrgentClass() {
-    let itemCard = document.querySelector("div.todo_item_container");
-
-}
 function deleteAllTasks(toDoList) {
 
     toDoList.items = [];
@@ -796,7 +898,7 @@ function deleteAllTasks(toDoList) {
 function itemsWithoutDeletedTask(toDoListItems, taskId) {
     /*
     From an array of tasks (toDoListItems), remove the task whose
-    order value = 'orderValue'
+    id = 'taskId'
     */
     let newToDoListItems = [];
     for (elem of toDoListItems) {
