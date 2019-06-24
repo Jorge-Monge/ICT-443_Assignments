@@ -57,23 +57,45 @@ header.jumbotron p{
 
 #todo_item_list_container {
     margin-top: 2rem;
-    list-style-type: none; 
+}
+
+div.todo_item_supercontainer {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 div.todo_item_container.card {
     position: relative;
-    background-color: rgba(21, 143, 52, 0.1);
+    margin: 2rem auto;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.1);
     padding: 0.5rem;
-    border-left: solid 3px rgb(28, 30, 161);
-    box-shadow: 0 0 1rem rgb(230,230,230);
-}
-
-div.todo_item_container.card.urgent {
     border-left: solid 3px red;
+    box-shadow: 0 0 1rem rgb(200,200,200);
+    cursor: move;
 }
 
+/* DRAG AND DROP STYLES */
 
-div.todo_item_container.card.WorkingOut:after {
+.droppable {
+    padding: 1rem;
+}
+
+.droppable.card_hovered {
+    border: 5px dashed rgb(80,120,80);
+    border-radius: 10%;
+}
+
+.hold {
+    border: 5px dashed rgb(180,180,180);
+    border-radius: 10%;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+div.todo_item_container.card.special_task:after {
     z-index: -1000;
     content: "";
     position: absolute;
@@ -81,49 +103,27 @@ div.todo_item_container.card.WorkingOut:after {
     top: 0;
     width: 100%;
     height: 100%;
-    background-image: url("../assets/images/workingout.jpg");
     background-size: cover;
-    opacity: 0.2;
+    opacity: 0.4;
+}
+
+div.todo_item_container.card.WorkingOut:after {
+    background-image: url("../assets/images/workingout.jpg");
 }
 
 div.todo_item_container.card.GroceryItem:after {
-    z-index: -1000;
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
     background-image: url("../assets/images/groceryitem.jpg");
-    background-size: cover;
-    opacity: 0.2;
 }
 
 div.todo_item_container.card.PhoneCall:after {
-    z-index: -1000;
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
     background-image: url("../assets/images/phonecall.jpg");
-    background-size: cover;
-    opacity: 0.2;
 }
 
+
 div.todo_item_container.card.Meeting:after {
-    z-index: -1000;
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
     background-image: url("../assets/images/meeting.jpg");
-    background-size: cover;
-    opacity: 0.2;
 }
+
 
 div.todo_item_container.card.urgent {
     background-color: rgba(217,83,79,0.2);
@@ -151,10 +151,6 @@ div.todo_item_container.card:before {
 
 }
 
-.todo_item_container {
-    margin: 2rem auto;
-}
-
 .todo_item_section_heading {
     font-size: 0.8rem;
     font-weight: bolder;
@@ -170,6 +166,7 @@ div.todo_item_container.card:before {
     width: 0.5rem;
     height:0.2rem;
     background-color: rgb(28, 30, 161);
+    background-color: red;
 }
 
 .todo_item_section_heading.urgent_heading:after {
@@ -237,25 +234,6 @@ i.fa-edit {
     left: 2rem;
 }
 
-/* DRAG AND DROP STYLES */
-.hold {
-    border: solid red 4px;
-    
-}
-
-.drag-start {
-    outline: 5px dashed red;
-    outline-offset: -1rem;
-}
-
-.drag-enter {
-    outline: 5px dashed blue;
-    outline-offset: -1rem;
-}
-
-.todo_item_container.hovered {
-    border: 5px dashed red;
-}
 
 /* Small devices (landscape phones, 576px and up) */
 @media (max-width: 576px) {

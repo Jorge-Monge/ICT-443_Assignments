@@ -25,6 +25,7 @@ let taskCategoryGroup;
 let taskCategory;
 let taskCategorySelector = document.querySelector("#task_category_input_id");
 let showHideAllBtn = document.querySelector("#hide_tasks_btn");
+let prototype_html_card = document.querySelector(".todo_item_card_prototype");
 //let itemCards = document.querySelectorAll("div.todo_item_container");
 let draggedCardObject;
 //let draggedOrderValue;
@@ -112,8 +113,20 @@ class TodoList {
 }
 
 
-// CREATE THE TO-DO LIST
-let toDoList = new TodoList("todoList-ICT443");
+// CREATE THE TO-DO LIST, IF IT IS NOT ALREADY STORED IN LOCAL STORAGE
+//window.localStorage.removeItem("toDoList");
+if (fetchFromLocalStorage("toDoList")) {
+    var toDoList = fetchFromLocalStorage("toDoList");
+    for (elm of toDoList.items) {
+        let secondsSinceEpoch = Date.parse(elm.dueDate);
+        elm.dueDate = new Date(secondsSinceEpoch);
+    }
+    console.log(toDoList);
+    redrawTaskCards(toDoList);
+} else {
+    var toDoList = new TodoList("todoList-ICT443");
+}
+
 
 let jumbotronHeader = document.querySelector("header");
 let newTaskButton = document.querySelector("#new_task_btn");
@@ -216,7 +229,6 @@ taskCategorySelector.addEventListener("change", function (event) {
 //
 
 let delete_all_tasks_btn = document.querySelector("#delete_tasks_btn");
-let prototype_html_card = document.querySelector(".todo_item_card_prototype");
 
 newTaskFormContainer.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -398,7 +410,7 @@ document.addEventListener("click", (e) => {
         decreaseOrderValue(toDoList, taskOrderDelete);
         // Re-draw the task cards
         deleteAllTaskHtmlElems();
-        redrawTaskCards(toDoList)
+        redrawTaskCards(toDoList);
     }
 
 })
@@ -672,12 +684,15 @@ function enableDisableShowAllDeleteAllBtns(toDoListItems) {
 }
 
 function redrawTaskCards(toDoList) {
+    console.log("Drawing the cards");
+    console.log(toDoList);
 
     // Here the grocery item is correct.
     //console.log(toDoList);
 
     let newItemHtml;
     toDoList.items.forEach((taskObject) => {
+        console.log("taskObject:", taskObject);
         newItemHtml = createNewItemHtml(prototype_html_card, taskObject);
         newItemHtml.classList.remove("d-none");
         newItemHtml.classList.remove("todo_item_card_prototype");
@@ -686,52 +701,41 @@ function redrawTaskCards(toDoList) {
 }
 
 function dragStart(e) {
-    //console.log(this.parentElement);
-    //this.parentElement.classList.add("hold");
-    this.parentElement.classList.add("drag-start")
-    setTimeout(() => (this.classList.add("d-none")), 0);
-    //setTimeout(() => (this.parentElement.classList.add("drag-start")), 0);
-    //draggedOrderValue = e.target.dataset.order;
-    //draggedCardId = e.target.id;
+    this.parentNode.classList.add("hold");
+    setTimeout(() => (this.classList.add("hidden")), 0);
+    // Storing the element that is being dragged
     draggedCardHtml = e.target;
+}
 
+function dragEnd(e) {
+    this.parentElement.classList.remove("hold");
+    this.classList.remove("hidden");
 }
 
 function dragOver(e) {
     e.preventDefault();
-    //console.log("drag over");
-    // Set the dropEffect to move
-    e.dataTransfer.dropEffect = "move";
-    //e.target.classList.add("drag-enter");
-    
-
 }
 
 function dragEnter(e) {
-    e.preventDefault();
-    console.log("drag enter");
-    console.log(this.querySelector("div"));
-    console.log(e.target);
-    //this.classList.add("hovered");
-    //e.target.classList.add("drag-enter")
+    e.preventDefault();  
+    if (e.target.classList.contains("droppable")
+        && draggedCardHtml.dataset.id != e.target.querySelector("div").dataset.id) {
+        e.target.classList.add("card_hovered");
+        e.target.querySelector("div").classList.add("hidden");
+    }
 }
 
-function dragLeave() {
-    //this.classList.remove("hovered");
-    //console.log("Drag Leave");
-
-}
-
-function dragEnd(e) {
-    //console.log("Drag End");
-    //console.log(e.target);
-    this.parentElement.classList.remove("hold");
-    this.parentElement.classList.remove("d-none");
+function dragLeave(e) {
+    if (e.target.classList.contains("droppable") 
+        && draggedCardHtml.dataset.id != e.target.querySelector("div").dataset.id) {
+        e.target.classList.remove("card_hovered");
+        e.target.querySelector("div").classList.remove("hidden");
+    }
 }
 
 function dragDrop() {
 
-    let receivOrderValue = this.querySelectorAll("div")[0].dataset.order;
+    let receivOrderValue = this.querySelector("div>div.droppable>div").dataset.order;
 
     // Temporarily storing the dragging object
     let draggedCardObject = toDoList.items.filter((arrayObject) => arrayObject.id === parseInt(draggedCardHtml.dataset.id));
@@ -741,6 +745,7 @@ function dragDrop() {
     
     // Fill the void left by the dragged card.
     decreaseOrderValue(toDoList, draggedCardHtml.dataset.order);
+
     // Create the void needed to accomodate the dragged card 
     increaseOrderValue(toDoList, receivOrderValue);
 
@@ -759,44 +764,32 @@ function dragDrop() {
 }
 
 function addDragEventsReceivingCard(domElem) {
-
-    // Both 'dragover' and 'drop' event listeners are needed.
     domElem.addEventListener("dragover", dragOver);
     domElem.addEventListener("drop", dragDrop);
-
-    
     domElem.addEventListener("dragenter", dragEnter);
-    /*
     domElem.addEventListener("dragleave", dragLeave);
-    */
-
-
 }
 
 function addDragEventsDraggingCard(domElem) {
-
     domElem.addEventListener("dragstart", dragStart);
     domElem.addEventListener("dragend", dragEnd);
 }
 
 function createNewItemHtml(prototype_html_card, toDoItem) {
 
-    // Here the grocery item is correct.
-    //console.log("Creating HTML Element");
-    //console.log(toDoItem);
-    //console.log("PROTOTYPE OF THE ELEMENT BEING DRAWN");
-    //console.log(toDoItem.constructor.name);
     let toDoItemPrototype = toDoItem.constructor.name;
+    console.log("Constructor Name:", toDoItemPrototype);
 
     // The prototype card is CLONED
-    // 'newHtmlCard' will be the receiving card.
+    // The first DIV child of 'newHtmlCard' will be the drag-drop area
     let newHtmlCard = prototype_html_card.cloneNode(true);
-    // First child of the prototype card is the DOM element that
+    // Second child of the prototype card is the DOM element that
     // we want to make draggable.
-    let newHtmlCardFill = newHtmlCard.querySelectorAll("div")[0];
+    let droppableArea = newHtmlCard.querySelectorAll("div")[0];
+    let newHtmlCardFill = newHtmlCard.querySelectorAll("div")[1];
 
     // Add DRAG EVENTS
-    addDragEventsReceivingCard(newHtmlCard);
+    addDragEventsReceivingCard(droppableArea);
     addDragEventsDraggingCard(newHtmlCardFill);
 
     let toggableSections = newHtmlCard.querySelectorAll(".toggable_todo_item_section");
@@ -807,7 +800,7 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     }
 
     // Task ID, task Order
-    let a = newHtmlCard.querySelector(".todo_item_card_prototype>div");
+    let a = newHtmlCard.querySelector(".todo_item_card_prototype>div>div");
     a.setAttribute("data-id", toDoItem.id);
     a.setAttribute("data-order", toDoItem.order);
     a.setAttribute("data-before-content", toDoItem.order);
@@ -815,6 +808,9 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
     // Add a class referencing the Category, so that the background of the 
     // task card can be chosen appropriately
     a.classList.add(toDoItemPrototype);
+    if (toDoItemPrototype != "DefaultToDoItem") {
+        a.classList.add("special_task");
+    }
     if (toDoItem.isUrgent) {
         for (let elem of a.querySelectorAll(".todo_item_section_heading")) {
             elem.classList.add("urgent_heading");
@@ -886,6 +882,9 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
         a.classList.add("urgent");
     }
 
+    // Store the list of tasks in Local Storage
+    saveToLocalStorage("toDoList", toDoList);
+
     return newHtmlCard;
 }
 
@@ -893,6 +892,14 @@ function deleteAllTasks(toDoList) {
 
     toDoList.items = [];
 
+}
+
+function saveToLocalStorage(key, object) {
+    window.localStorage.setItem(key, JSON.stringify(object));
+}
+
+function fetchFromLocalStorage(key) {
+    return JSON.parse(window.localStorage.getItem(key));
 }
 
 function itemsWithoutDeletedTask(toDoListItems, taskId) {

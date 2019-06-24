@@ -160,62 +160,65 @@
 
             <!-- 'prototype_html_card' variable in JS -->
             <div class="todo_item_card_prototype todo_item_supercontainer col-md-6 col-lg-4 d-none">
-                <div draggable="true" data-id="" data-order="" data-before-content="" class="empty todo_item_container card">
-                    <div class="todo_item_list">
-
-                        <!-- TOGABBLE SECTION -->
-                        <div class="toggable_todo_item_section DefaultToDoItem d-none">
-                                <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>NAME</div>
-                                <div class="todo_item_section todo_item_name"></div>
-                        </div>
-                        <!-- TOGABBLE SECTION -->
-                        <div class="toggable_todo_item_section GroceryItem d-none">
-                            <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>GROCERY ITEM
+                <div class="droppable">
+                        <div draggable="true" data-id="" data-order="" data-before-content="" class="empty todo_item_container card">
+                                <div class="todo_item_list">
+            
+                                    <!-- TOGABBLE SECTION -->
+                                    <div class="toggable_todo_item_section DefaultToDoItem d-none">
+                                            <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>NAME</div>
+                                            <div class="todo_item_section todo_item_name"></div>
+                                    </div>
+                                    <!-- TOGABBLE SECTION -->
+                                    <div class="toggable_todo_item_section GroceryItem d-none">
+                                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>GROCERY ITEM
+                                        </div>
+                                        <div class="todo_item_section todo_item_grocery_item_name"></div>
+                                        <div class="todo_item_section_heading"><i
+                                                class="fas fa-angle-double-right"></i>QUANTITY</div>
+                                        <div class="todo_item_section todo_item_grocery_quantity"></div>
+                                    </div>
+                                     <!-- TOGABBLE SECTION -->
+                                    <div class="toggable_todo_item_section WorkingOut d-none">
+                                        <div class="todo_item_section_heading"><i
+                                                class="fas fa-angle-double-right"></i>ACTIVITY</div>
+                                        <div class="todo_item_section todo_item_workingout_activity"></div>
+                                        <div class="todo_item_section_heading"><i
+                                                class="fas fa-angle-double-right"></i>DISTANCE/TIME</div>
+                                        <div class="todo_item_section todo_item_workingout_distance_time"></div>
+                                    </div>
+                                    <!-- TOGABBLE SECTION -->
+                                    <div class="toggable_todo_item_section PhoneCall d-none">
+                                        <div class="todo_item_section_heading"><i
+                                                class="fas fa-angle-double-right"></i>PERSON NAME</div>
+                                        <div class="todo_item_section todo_item_phonecall_personname"></div>
+                                        <div class="todo_item_section_heading"><i
+                                                class="fas fa-angle-double-right"></i>PHONE NUMBER</div>
+                                        <div class="todo_item_section todo_item_phone_number"></div>
+                                    </div>
+                                    <!-- TOGABBLE SECTION -->
+                                    <div class="toggable_todo_item_section Meeting d-none">
+                                        <div class="todo_item_section_heading"><i
+                                                class="fas fa-angle-double-right"></i>ATTENDEES</div>
+                                        <div class="todo_item_section todo_item_meeting_attendees"></div>
+                                    </div>
+                                    <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>DESCRIPTION
+                                    </div>
+                                    <div class="todo_item_section todo_item_description"></div>
+                                    <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>DUE DATE</div>
+                                    <div class="todo_item_section todo_item_dueDate"></div>
+                                    <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>URGENT</div>
+                                    <div class="todo_item_section todo_item_isUrgent"></div>
+                                    <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>CATEGORY</div>
+                                    <div class="todo_item_section todo_item_category"></div>
+                                </div>
+                                <footer class="todo_item_actions_btns">
+                                    <i id="edit_task_btn" class="task_action_btn fas fa-edit"></i>
+                                    <i id="delete_task_btn" class="task_action_btn far fa-trash-alt"></i>
+                                </footer>
                             </div>
-                            <div class="todo_item_section todo_item_grocery_item_name"></div>
-                            <div class="todo_item_section_heading"><i
-                                    class="fas fa-angle-double-right"></i>QUANTITY</div>
-                            <div class="todo_item_section todo_item_grocery_quantity"></div>
-                        </div>
-                         <!-- TOGABBLE SECTION -->
-                        <div class="toggable_todo_item_section WorkingOut d-none">
-                            <div class="todo_item_section_heading"><i
-                                    class="fas fa-angle-double-right"></i>ACTIVITY</div>
-                            <div class="todo_item_section todo_item_workingout_activity"></div>
-                            <div class="todo_item_section_heading"><i
-                                    class="fas fa-angle-double-right"></i>DISTANCE/TIME</div>
-                            <div class="todo_item_section todo_item_workingout_distance_time"></div>
-                        </div>
-                        <!-- TOGABBLE SECTION -->
-                        <div class="toggable_todo_item_section PhoneCall d-none">
-                            <div class="todo_item_section_heading"><i
-                                    class="fas fa-angle-double-right"></i>PERSON NAME</div>
-                            <div class="todo_item_section todo_item_phonecall_personname"></div>
-                            <div class="todo_item_section_heading"><i
-                                    class="fas fa-angle-double-right"></i>PHONE NUMBER</div>
-                            <div class="todo_item_section todo_item_phone_number"></div>
-                        </div>
-                        <!-- TOGABBLE SECTION -->
-                        <div class="toggable_todo_item_section Meeting d-none">
-                            <div class="todo_item_section_heading"><i
-                                    class="fas fa-angle-double-right"></i>ATTENDEES</div>
-                            <div class="todo_item_section todo_item_meeting_attendees"></div>
-                        </div>
-                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>DESCRIPTION
-                        </div>
-                        <div class="todo_item_section todo_item_description"></div>
-                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>DUE DATE</div>
-                        <div class="todo_item_section todo_item_dueDate"></div>
-                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>URGENT</div>
-                        <div class="todo_item_section todo_item_isUrgent"></div>
-                        <div class="todo_item_section_heading"><i class="fas fa-angle-double-right"></i>CATEGORY</div>
-                        <div class="todo_item_section todo_item_category"></div>
-                    </div>
-                    <footer class="todo_item_actions_btns">
-                        <i id="edit_task_btn" class="task_action_btn fas fa-edit"></i>
-                        <i id="delete_task_btn" class="task_action_btn far fa-trash-alt"></i>
-                    </footer>
                 </div>
+                
             </div>
 
         </div>
