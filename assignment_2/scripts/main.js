@@ -5,7 +5,10 @@
 // Date: June 2019
 //
 
+
 // TODO: When editing a form, if the category is changed, the value 'undefined' is hardcoded.
+// TODO: card is NOT centered when in mobile view
+
 /*
 Working out
 Photo by Victor Freitas on Unsplash
@@ -30,7 +33,18 @@ let prototype_html_card = document.querySelector(".todo_item_card_prototype");
 let draggedCardObject;
 //let draggedOrderValue;
 //let draggedCardId;
-
+let jumbotronHeader = document.querySelector("header");
+let newTaskButton = document.querySelector("#new_task_btn");
+let newTaskFormContainer = document.querySelector("#global_container_form");
+let newTaskForm = document.querySelector("#new_task_form_id");
+let hide_all_tasks_btn = document.querySelector("#hide_tasks_btn");
+let delete_all_tasks_btn = document.querySelector("#delete_tasks_btn");
+let todo_item_list_container = document.querySelector("#todo_item_list_container");
+let maxOrderValue = 0;
+let editTask = false;
+let editTaskId = null;
+let editedTaskDelete = null;
+let deleteTaskBtn = document.querySelector("#delete_task_button");
 
 let taskBeingEdited = null;
 
@@ -121,24 +135,15 @@ if (fetchFromLocalStorage("toDoList")) {
         let secondsSinceEpoch = Date.parse(elm.dueDate);
         elm.dueDate = new Date(secondsSinceEpoch);
     }
-    console.log(toDoList);
     redrawTaskCards(toDoList);
+    // Enable 'Hide All' and 'Delete All' buttons
+    enableDisableShowAllDeleteAllBtns(toDoList.items);
 } else {
     var toDoList = new TodoList("todoList-ICT443");
 }
 
 
-let jumbotronHeader = document.querySelector("header");
-let newTaskButton = document.querySelector("#new_task_btn");
-let newTaskFormContainer = document.querySelector("#global_container_form");
-let newTaskForm = document.querySelector("#new_task_form_id");
-let hide_all_tasks_btn = document.querySelector("#hide_tasks_btn");
-let todo_item_list_container = document.querySelector("#todo_item_list_container");
-let maxOrderValue = 0;
-let editTask = false;
-let editTaskId = null;
-let editedTaskDelete = null;
-let deleteTaskBtn = document.querySelector("#delete_task_button");
+
 
 
 //
@@ -185,8 +190,7 @@ document.addEventListener("click", (e) => {
         // Hide the Jumbotron header, show the form
         hideElemShowElem(jumbotronHeader, newTaskFormContainer);
 
-    }
-    else if (e.target && e.target.id == "hide_tasks_btn") { // 'Hide All' button
+    } else if (e.target && e.target.id == "hide_tasks_btn") { // 'Hide All' button
 
         if (e.target.classList.contains("cards_hidden")) { // Cards are hidden when button clicked
             e.target.innerHTML = "Hide All";
@@ -200,8 +204,7 @@ document.addEventListener("click", (e) => {
         }
 
 
-    }
-    else if (e.target && e.target.id == "delete_tasks_btn") { // 'Delete All' button
+    } else if (e.target && e.target.id == "delete_tasks_btn") { // 'Delete All' button
 
         deleteAllTasks(toDoList);
         deleteAllTaskHtmlElems();
@@ -228,7 +231,6 @@ taskCategorySelector.addEventListener("change", function (event) {
 // SUBMIT FORM
 //
 
-let delete_all_tasks_btn = document.querySelector("#delete_tasks_btn");
 
 newTaskFormContainer.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -318,7 +320,9 @@ newTaskFormContainer.addEventListener("submit", function (event) {
 
     // Order tasks in toDoList.items (an array of objects)
     // according to the task order values
-    toDoList.items.sort((a, b) => { return a.order - b.order });
+    toDoList.items.sort((a, b) => {
+        return a.order - b.order
+    });
 
     // Delete all the task HTML elems.
     deleteAllTaskHtmlElems();
@@ -351,8 +355,7 @@ document.addEventListener("click", (e) => {
         // Pre-fills the order value with the next logical number
         maxOrderValue = maxValue(toDoList.items, "order");
         populateOrderValue(maxOrderValue);
-    }
-    else if (e.target && e.target.id == "new_task_form_cancel_btn") { // 'Cancel' form button
+    } else if (e.target && e.target.id == "new_task_form_cancel_btn") { // 'Cancel' form button
 
         editTask = false;
         hideElemShowElem(newTaskFormContainer, jumbotronHeader);
@@ -395,8 +398,7 @@ document.addEventListener("click", (e) => {
         */
         fillFormTaskData(toDoList.items, editTaskId);
 
-    }
-    else if (e.target && e.target.id == "delete_task_btn") { // DELETE task
+    } else if (e.target && e.target.id == "delete_task_btn") { // DELETE task
 
         var taskId = e.target.parentNode.parentNode.getAttribute("data-id");
 
@@ -673,6 +675,7 @@ function decreaseOrderValue(toDoList, taskOrder) {
 
 function enableDisableShowAllDeleteAllBtns(toDoListItems) {
 
+    console.log(toDoListItems.length);
     if (toDoListItems.length === 0) {
         hide_all_tasks_btn.disabled = true;
         delete_all_tasks_btn.disabled = true;
@@ -684,15 +687,12 @@ function enableDisableShowAllDeleteAllBtns(toDoListItems) {
 }
 
 function redrawTaskCards(toDoList) {
-    console.log("Drawing the cards");
-    console.log(toDoList);
 
     // Here the grocery item is correct.
     //console.log(toDoList);
 
     let newItemHtml;
     toDoList.items.forEach((taskObject) => {
-        console.log("taskObject:", taskObject);
         newItemHtml = createNewItemHtml(prototype_html_card, taskObject);
         newItemHtml.classList.remove("d-none");
         newItemHtml.classList.remove("todo_item_card_prototype");
@@ -717,17 +717,17 @@ function dragOver(e) {
 }
 
 function dragEnter(e) {
-    e.preventDefault();  
-    if (e.target.classList.contains("droppable")
-        && draggedCardHtml.dataset.id != e.target.querySelector("div").dataset.id) {
+    e.preventDefault();
+    if (e.target.classList.contains("droppable") &&
+        draggedCardHtml.dataset.id != e.target.querySelector("div").dataset.id) {
         e.target.classList.add("card_hovered");
         e.target.querySelector("div").classList.add("hidden");
     }
 }
 
 function dragLeave(e) {
-    if (e.target.classList.contains("droppable") 
-        && draggedCardHtml.dataset.id != e.target.querySelector("div").dataset.id) {
+    if (e.target.classList.contains("droppable") &&
+        draggedCardHtml.dataset.id != e.target.querySelector("div").dataset.id) {
         e.target.classList.remove("card_hovered");
         e.target.querySelector("div").classList.remove("hidden");
     }
@@ -742,7 +742,7 @@ function dragDrop() {
 
     // Temporarily removing the dragging object from the list of tasks
     toDoList.items = itemsWithoutDeletedTask(toDoList.items, draggedCardHtml.dataset.id);
-    
+
     // Fill the void left by the dragged card.
     decreaseOrderValue(toDoList, draggedCardHtml.dataset.order);
 
@@ -755,8 +755,10 @@ function dragDrop() {
 
     // Order tasks in toDoList.items (an array of objects)
     // according to the task order values
-    toDoList.items.sort((a, b) => { return a.order - b.order });
-    
+    toDoList.items.sort((a, b) => {
+        return a.order - b.order
+    });
+
     // Re-draw the task cards
     deleteAllTaskHtmlElems();
     redrawTaskCards(toDoList)
@@ -778,7 +780,6 @@ function addDragEventsDraggingCard(domElem) {
 function createNewItemHtml(prototype_html_card, toDoItem) {
 
     let toDoItemPrototype = toDoItem.constructor.name;
-    console.log("Constructor Name:", toDoItemPrototype);
 
     // The prototype card is CLONED
     // The first DIV child of 'newHtmlCard' will be the drag-drop area
@@ -829,33 +830,25 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
         // Grocery quantity
         let e = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_grocery_quantity");
         e.appendChild(document.createTextNode(toDoItem.grocery_quantity));
-    }
-
-    else if (toDoItemPrototype === "WorkingOut") {
+    } else if (toDoItemPrototype === "WorkingOut") {
         // WorkingOut Activity
         let f = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_workingout_activity");
         f.appendChild(document.createTextNode(toDoItem.activity));
         // WorkingOut Distance-Time
         let g = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_workingout_distance_time");
         g.appendChild(document.createTextNode(toDoItem.distance_time));
-    }
-
-    else if (toDoItemPrototype === "PhoneCall") {
+    } else if (toDoItemPrototype === "PhoneCall") {
         // PhoneCall Person
         let h = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_phonecall_personname");
         h.appendChild(document.createTextNode(toDoItem.person));
         // PhoneCall Number
         let j = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_phone_number");
         j.appendChild(document.createTextNode(toDoItem.number));
-    }
-
-    else if (toDoItemPrototype === "Meeting") {
+    } else if (toDoItemPrototype === "Meeting") {
         // Meeting
         let k = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_meeting_attendees");
         k.appendChild(document.createTextNode(toDoItem.attendees));
-    }
-
-    else if (toDoItemPrototype === "DefaultToDoItem") {
+    } else if (toDoItemPrototype === "DefaultToDoItem") {
         // Task name
         let c = newHtmlCard.querySelector(".todo_item_card_prototype div.todo_item_name");
         c.appendChild(document.createTextNode(toDoItem.name));
@@ -891,6 +884,7 @@ function createNewItemHtml(prototype_html_card, toDoItem) {
 function deleteAllTasks(toDoList) {
 
     toDoList.items = [];
+    window.localStorage.removeItem("toDoList");
 
 }
 
@@ -899,7 +893,39 @@ function saveToLocalStorage(key, object) {
 }
 
 function fetchFromLocalStorage(key) {
-    return JSON.parse(window.localStorage.getItem(key));
+    // Getting the toDoList object. Note that the task-type object
+    // wasn't stored in the toDoList, and we need to recreate them
+    // in order to redraw the task cards properly
+    let tempObject = JSON.parse(window.localStorage.getItem(key));
+    let toDoList = new TodoList("todoList-ICT443");
+
+    if (tempObject) {
+        for (elm of tempObject.items) {
+            let dataObject = {
+                taskId: elm.id,
+                taskOrder: elm.order,
+                taskCategoryGroup: elm.categoryGroup,
+                taskCategory: elm.category,
+                taskName: elm.name,
+                taskGroceryItemName: elm.grocery_item_name,
+                taskGroceryQty: elm.grocery_quantity,
+                taskWorkingOutActivity: elm.activity,
+                taskActivityKmsTime: elm.distance_time,
+                taskPhoneCallPerson: elm.person,
+                taskPhoneCallNumber: elm.number,
+                taskMeetingAttendees: elm.attendees,
+                taskDueDateWithTimeZone: elm.dueDate,
+                taskIsUrgent: elm.isUrgent,
+                taskDescription: elm.description
+            };
+            let tempToDoItem = getAppropriateTaskObjectInstance(dataObject);
+            toDoList.items.push(tempToDoItem);
+            
+            
+        }
+    }
+
+    return toDoList;
 }
 
 function itemsWithoutDeletedTask(toDoListItems, taskId) {

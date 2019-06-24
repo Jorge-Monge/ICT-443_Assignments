@@ -66,13 +66,13 @@ div.todo_item_supercontainer {
 
 div.todo_item_container.card {
     position: relative;
-    margin: 2rem auto;
+    /*margin: 2rem auto;*/
     margin: 0;
     background-color: rgba(255, 255, 255, 0.1);
     padding: 0.5rem;
-    border-left: solid 3px red;
-    box-shadow: 0 0 1rem rgb(200,200,200);
+    border-left: solid 5px red;
     cursor: move;
+    /*box-shadow: 0 0 1rem rgb(200,200,200);*/
 }
 
 /* DRAG AND DROP STYLES */
@@ -83,12 +83,12 @@ div.todo_item_container.card {
 
 .droppable.card_hovered {
     border: 5px dashed rgb(80,120,80);
-    border-radius: 10%;
+    border-radius: 5%;
 }
 
 .hold {
     border: 5px dashed rgb(180,180,180);
-    border-radius: 10%;
+    border-radius: 5%;
 }
 
 .hidden {
@@ -126,12 +126,13 @@ div.todo_item_container.card.Meeting:after {
 
 
 div.todo_item_container.card.urgent {
-    background-color: rgba(217,83,79,0.2);
+    /*background-color: rgba(217,83,79,0.2);*/
 }
+
 
 /* The order number on the top right corner of the task card */
 
-div.todo_item_container.card:before {
+div.todo_item_container.card:before {  
     position: absolute;
     top: -1.0rem;
     right: 1.5rem;
@@ -143,12 +144,17 @@ div.todo_item_container.card:before {
     color: red;
     font-weight: bolder;
     background-color: white;
-    border: solid rgb(230,230,230) 1px;
     border-radius: 100%;
-    padding-top: 0.3rem;
-    box-shadow: 0 0 0.8rem rgb(200,200,200);
+    padding: 0.3rem;
+    box-shadow: 0 0.2rem 0.8rem rgb(200,200,200);
     z-index: 100;
+}
 
+
+div.todo_item_container.card.urgent:before {
+    color: white;
+    background-color: red;
+    margin: 0.5rem;
 }
 
 .todo_item_section_heading {
