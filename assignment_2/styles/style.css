@@ -4,7 +4,7 @@
 // presented as an exercise for the UoC course: ICT-443 Javascript Advanced
 //
 // Author: Jorge Monge
-// Date: 2019-June-13
+// Date: 2019-June-24
 //
 */
 
@@ -66,13 +66,11 @@ div.todo_item_supercontainer {
 
 div.todo_item_container.card {
     position: relative;
-    /*margin: 2rem auto;*/
-    margin: 0;
+    margin: 0 auto;
     background-color: rgba(255, 255, 255, 0.1);
     padding: 0.5rem;
     border-left: solid 5px red;
     cursor: move;
-    /*box-shadow: 0 0 1rem rgb(200,200,200);*/
 }
 
 /* DRAG AND DROP STYLES */
@@ -125,11 +123,6 @@ div.todo_item_container.card.Meeting:after {
 }
 
 
-div.todo_item_container.card.urgent {
-    /*background-color: rgba(217,83,79,0.2);*/
-}
-
-
 /* The order number on the top right corner of the task card */
 
 div.todo_item_container.card:before {  
@@ -171,7 +164,6 @@ div.todo_item_container.card.urgent:before {
     content: "";
     width: 0.5rem;
     height:0.2rem;
-    background-color: rgb(28, 30, 161);
     background-color: red;
 }
 
@@ -181,7 +173,7 @@ div.todo_item_container.card.urgent:before {
 
 .todo_item_section {
     position: relative;
-    margin: 0 0 0 0rem;
+    margin: 0;
     padding: 0.7rem 0.5rem 0.5rem 1rem;
     margin-top: 0rem;
     text-align: left;

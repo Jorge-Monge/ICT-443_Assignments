@@ -5,8 +5,6 @@
 // Date: June 2019
 //
 
-
-// TODO: When editing a form, if the category is changed, the value 'undefined' is hardcoded.
 // TODO: card is NOT centered when in mobile view
 
 /*
@@ -156,23 +154,14 @@ document.addEventListener("click", (e) => {
         // Clear the form values
         clearFormValues(newTaskForm);
 
-        if (editTask) {
-            console.log(taskBeingEdited);
-            let changeEvent = new Event("change");
-            taskCategorySelector.value = taskBeingEdited.category;
-            taskCategorySelector.dispatchEvent(changeEvent);
+        // Force a 'change' event on the Category dropdown,
+        // to populate the fields that change with it.
+        let changeEvent = new Event("change");
+        taskCategorySelector.value = editTask ? taskBeingEdited.category: "";
+        taskCategorySelector.dispatchEvent(changeEvent);
+        taskCategorySelector.value = null;
 
-
-            taskCategorySelector.value = null;
-        } else {
-            //console.log("I am not in an EDIT SESSION");
-            // Clears previous category selections, if NOT IN EDITING SESSION
-            let changeEvent = new Event("change");
-            taskCategorySelector.dispatchEvent(changeEvent);
-            taskCategorySelector.value = null;
-        }
-
-        // Pre-fills the order value with the next order number
+        // Pre-fills the order value with the next order number (unless in Edit mode)
         maxOrderValue = !editTask ? maxValue(toDoList.items, "order") : maxValue(toDoList.items, "order") - 1;
         populateOrderValue(maxOrderValue);
 
@@ -183,10 +172,12 @@ document.addEventListener("click", (e) => {
         let taskOrderInput = document.querySelector("#task_order_input_id");
         taskOrderInput.setAttribute("max", maxOrderValue + 1);
 
-        // Pre-fills the date input with today's date
-        let todayLocale = new Date().toLocaleDateString();
-        document.querySelector("#task_due_date_input_id").valueAsDate = new Date(Date.parse(todayLocale));
-
+        // Pre-fills the date input with today's date (unless in Edit mode)
+        if (!editTask) {
+            let todayLocale = new Date().toLocaleDateString();
+            document.querySelector("#task_due_date_input_id").valueAsDate = new Date(Date.parse(todayLocale));
+        }
+        
         // Hide the Jumbotron header, show the form
         hideElemShowElem(jumbotronHeader, newTaskFormContainer);
 
@@ -216,22 +207,20 @@ document.addEventListener("click", (e) => {
 //
 // TASK CATEGORY DROPDOWN LISTENER
 //
-//taskCategorySelector = document.querySelector("#task_category_input_id");
 taskCategorySelector.addEventListener("change", function (event) {
     taskCategory = taskCategorySelector.value;
     taskCategoryGroup = categoryGroup("task_category_input_id");
-    //console.log(newTaskFormContainer);
-    //console.log(taskCategoryGroup);
-    //console.log(taskCategory);
     modifyFormAccordingCategory(newTaskFormContainer, taskCategoryGroup, taskCategory);
+
+    if (editTask) {
+        fillFormTaskData(toDoList.items, taskBeingEdited.category.id)
+    }
 });
 
 
 //
 // SUBMIT FORM
 //
-
-
 newTaskFormContainer.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -378,24 +367,18 @@ document.addEventListener("click", (e) => {
         editedTaskDelete = e.target;
         // Storing the task object corresponding to the card being edited,
         // so that we can re-draw the form correctly
-        /*var editedTaskCategory = 
-            document.querySelector(`[data-id='${editTaskId}'] div.todo_item_category`).innerHTML;*/
         for (let elem of toDoList.items) {
             if (elem.id == editTaskId) {
                 taskBeingEdited = elem;
             }
         }
         scrollToTop();
+
         // Show the form
         editTask = true; // Pass this information to the New Task operation
         newTaskButton.click();
+
         // Fill the form with the task data
-        /*
-        console.log("Editing a task...");
-        console.log("toDoList.items:");
-        console.log(toDoList.items);
-        console.log("editTaskId", editTaskId);
-        */
         fillFormTaskData(toDoList.items, editTaskId);
 
     } else if (e.target && e.target.id == "delete_task_btn") { // DELETE task
@@ -675,7 +658,6 @@ function decreaseOrderValue(toDoList, taskOrder) {
 
 function enableDisableShowAllDeleteAllBtns(toDoListItems) {
 
-    console.log(toDoListItems.length);
     if (toDoListItems.length === 0) {
         hide_all_tasks_btn.disabled = true;
         delete_all_tasks_btn.disabled = true;
@@ -962,13 +944,22 @@ function fillFormTaskData(toDoListItems, taskId) {
             document.querySelector("#task_order_input_id").value = elem.order;
             document.querySelector("#task_category_input_id").value = elem.category;
             document.querySelector("#task_name_input_id").value = elem.name;
-            document.querySelector("#grocery_item_name_input_id").value = elem.grocery_item_name;
-            document.querySelector("#grocery_quantity_input_id").value = elem.grocery_quantity;
-            document.querySelector("#activity_input_id").value = elem.activity;
-            document.querySelector("#distance_time_input_id").value = elem.distance_time;
-            document.querySelector("#person_name_input_id").value = elem.person;
-            document.querySelector("#telephone_number_input_id").value = elem.number;
-            document.querySelector("#attendees_input_id").value = elem.attendees;
+            document.querySelector("#grocery_item_name_input_id").value =
+                (elem.grocery_item_name != undefined) ? elem.grocery_item_name : "";
+            //console.log("Grocery Item Name");
+            //console.log(document.querySelector("#grocery_item_name_input_id").value)
+            document.querySelector("#grocery_quantity_input_id").value =
+                 (elem.grocery_quantity != undefined) ? elem.grocery_quantity : "";
+            document.querySelector("#activity_input_id").value =
+                (elem.activity != undefined) ? elem.activity : "";
+            document.querySelector("#distance_time_input_id").value =
+                (elem.distance_time != undefined) ? elem.distance_time : "";
+            document.querySelector("#person_name_input_id").value =
+                (elem.person != undefined) ? elem.person : "";
+            document.querySelector("#telephone_number_input_id").value =
+                (elem.number != undefined) ? elem.number : "";
+            document.querySelector("#attendees_input_id").value =
+                (elem.attendees != undefined) ? elem.attendees : "";
             document.querySelector("#task_due_date_input_id").valueAsDate = new Date(Date.parse(elem.dueDate));
             document.querySelector("#task_is_urgent_id").checked = elem.isUrgent;
             document.querySelector("#task_description_input_id").value = elem.description;
